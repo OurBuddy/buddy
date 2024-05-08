@@ -1,5 +1,9 @@
-import 'package:buddy/router.dart';
+import 'package:beamer/beamer.dart';
+import 'package:buddy/screens/welcome.dart';
+import 'package:buddy/states/providers.dart';
+import 'package:buddy/states/user.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -15,22 +19,49 @@ void main() async {
         "m54k",
   );
 
-  runApp(const ProviderScope(child: Buddy()));
+  await Hive.initFlutter();
+  await Hive.openBox(UserProvider.boxName);
+
+  runApp(ProviderScope(child: Buddy()));
 }
 
-class Buddy extends StatelessWidget {
+class Buddy extends HookConsumerWidget {
   const Buddy({super.key});
 
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.read(authProvider);
+
+    final router = BeamerDelegate(
+        initialPath: '/welcome',
+        locationBuilder: RoutesLocationBuilder(
+          routes: {
+            // Return either Widgets or BeamPages if more customization is needed
+            '/welcome': (context, state, data) => const WelcomeScreen(),
+          },
+        ).call,
+        guards: [
+          BeamGuard(
+            pathPatterns: ['/welcome', '/welcome/*'],
+            guardNonMatching: true,
+            check: (context, location) => ref.read(authProvider).isSignedIn,
+            beamToNamed: (origin, target) => '/welcome',
+          ),
+        ]);
+
     return MaterialApp.router(
       title: 'Buddy',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.black,
+          primary: Colors.black,
+        ),
         useMaterial3: true,
       ),
-      routerConfig: router,
+      themeMode: ThemeMode.light,
+      routeInformationParser: BeamerParser(),
+      routerDelegate: router,
     );
   }
 }
