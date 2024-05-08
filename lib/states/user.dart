@@ -1,8 +1,7 @@
 import 'dart:convert';
-import 'dart:io' show Platform;
 
+import 'package:buddy/data/profile.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -23,21 +22,12 @@ class UserState {
   });
 
   bool isConfigured() {
-    final profile = Hive.box(UserProvider.boxName)
-        .get("private", defaultValue: {})["penis"];
+    final profile =
+        Hive.box(UserProvider.boxName).get("private", defaultValue: {});
     return profile != null;
   }
 
   bool get isInSync => targetProfile == null;
-
-  bool get isUsingRevenueCatSupabseCheck =>
-      profile?.userDetails?.subscriptions.any((element) {
-        final entitlementPasses =
-            element.entitlement == "pro" || element.entitlement == "pro_yearly";
-        final datePasses = element.expiration.isAfter(DateTime.now());
-        return datePasses && entitlementPasses;
-      }) ??
-      false;
 
   UserState copyWith({
     Profile? profile,
@@ -106,8 +96,6 @@ class UserProvider extends StateNotifier<UserState> {
   final Ref ref;
 
   static String boxName = "userProfile";
-
-  final String _lastPushId = "";
 
   UserProvider(this.ref) : super(UserState()) {
     init();
@@ -228,6 +216,9 @@ class UserProvider extends StateNotifier<UserState> {
       // Create a new profile, temporary
       final profile = Profile(
         id: "local",
+        personName: "",
+        petName: "",
+        username: "",
       );
       if (set) {
         state = state.copyWith(
@@ -280,13 +271,13 @@ class UserProvider extends StateNotifier<UserState> {
         .from('profile_private')
         .select()
         .eq('id', id)
-        .maybeSingle() as Map<String, dynamic>?;
+        .maybeSingle();
 
     final privateUserResponse = await Supabase.instance.client
         .from('users')
         .select()
         .eq('id', id)
-        .maybeSingle() as Map<String, dynamic>?;
+        .maybeSingle();
 
     if (publicProfileResponse == null &&
         privateProfileResponse == null &&
@@ -348,7 +339,7 @@ class UserProvider extends StateNotifier<UserState> {
     } else {
       // This is also enforced on the backend. (Good try tho <3).
       if (userAccount.id != state.user!.id &&
-          (state.profile?.userDetails?.admin ?? false)) {
+          (state.profile?.userDetails?.role != Role.admin)) {
         state = state.copyWith(
           loading: false,
           targetProfile: null,
@@ -378,7 +369,7 @@ class UserProvider extends StateNotifier<UserState> {
         futures.add(privateProfileResponse);
 
         // Only update the user details if the user is an admin.
-        if (state.profile?.userDetails?.admin ?? false) {
+        if (state.profile?.userDetails?.role == Role.admin) {
           final privateUserResponse = Supabase.instance.client
               .from('users')
               .upsert(userAccount.userDetails?.toDBMap(userAccount.id) ?? {})
@@ -429,19 +420,13 @@ class UserProvider extends StateNotifier<UserState> {
   }
 
   void logout() {
-    final localProfile = getLocalProfile(set: false);
-
     final sanitizedProfile = Profile(
       id: "local",
-      name: null,
-      username: null,
-      bio: null,
-      private: ProfilePrivate(
-        drone: localProfile.private?.drone,
-        penis: localProfile.private?.penis,
-        voice: localProfile.private?.voice ?? 'allie',
-        preferHiFi: false,
-      ),
+      username: "",
+      personName: "",
+      petName: "",
+      bio: "",
+      private: null,
       userDetails: null,
     );
 
