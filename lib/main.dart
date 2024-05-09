@@ -1,5 +1,6 @@
 import 'package:beamer/beamer.dart';
-import 'package:buddy/screens/welcome.dart';
+import 'package:buddy/screens/welcome/login.dart';
+import 'package:buddy/screens/welcome/welcome.dart';
 import 'package:buddy/states/providers.dart';
 import 'package:buddy/states/user.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,7 @@ void main() async {
   await Hive.initFlutter();
   await Hive.openBox(UserProvider.boxName);
 
-  runApp(ProviderScope(child: Buddy()));
+  runApp(const ProviderScope(child: Buddy()));
 }
 
 class Buddy extends HookConsumerWidget {
@@ -39,6 +40,7 @@ class Buddy extends HookConsumerWidget {
           routes: {
             // Return either Widgets or BeamPages if more customization is needed
             '/welcome': (context, state, data) => const WelcomeScreen(),
+            '/welcome/login': (context, state, data) => const LoginScreen(),
           },
         ).call,
         guards: [

@@ -1,9 +1,10 @@
+import 'package:beamer/beamer.dart';
 import 'package:buddy/components/buttons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class WelcomeScreen extends StatelessWidget {
-  const WelcomeScreen({super.key});
+class LoginScreen extends StatelessWidget {
+  const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,9 @@ class WelcomeScreen extends StatelessWidget {
               children: [
                 Expanded(child: Image.asset("assets/logo-with-shadow.png")),
                 Button(
-                  onPressed: () {},
+                  onPressed: () {
+                    Beamer.of(context).beamToNamed("/welcome/login");
+                  },
                   child: const Text("Log In"),
                 ),
                 const SizedBox(height: 16),
