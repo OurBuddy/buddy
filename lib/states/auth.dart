@@ -55,6 +55,8 @@ class AuthProvider extends StateNotifier<AuthState> {
         setRecovery(event.session!);
       } else if (event.event == sb.AuthChangeEvent.userDeleted) {
         setInitial();
+      } else if (event.event == sb.AuthChangeEvent.initialSession) {
+        setInitial();
       }
     });
 
@@ -79,8 +81,10 @@ class AuthProvider extends StateNotifier<AuthState> {
 
   Future<void> setInitial() async {
     state = AuthState.initial();
-    ref.read(userProvider.notifier).setUser(null);
-    ref.read(userProvider.notifier).logout();
+    Future.delayed(Duration.zero, () {
+      ref.read(userProvider.notifier).setUser(null);
+      ref.read(userProvider.notifier).logout();
+    });
   }
 
   void setRecovery(sb.Session session) {

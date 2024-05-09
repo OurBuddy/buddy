@@ -1,13 +1,23 @@
 import 'package:beamer/beamer.dart';
 import 'package:buddy/components/buttons.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:buddy/states/providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulHookConsumerWidget {
   const LoginScreen({super.key});
 
   @override
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends ConsumerState<LoginScreen> {
+  @override
   Widget build(BuildContext context) {
+    final TextEditingController emailController = useTextEditingController();
+    final TextEditingController passwordController = useTextEditingController();
+
     return Scaffold(
       body: SizedBox(
         width: double.infinity,
@@ -15,21 +25,73 @@ class LoginScreen extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Expanded(child: Image.asset("assets/logo-with-shadow.png")),
-                Button(
-                  onPressed: () {
-                    Beamer.of(context).beamToNamed("/welcome/login");
-                  },
-                  child: const Text("Log In"),
+                // Back button
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: IconButton(
+                    icon: const Icon(
+                      Icons.chevron_left_rounded,
+                      size: 32,
+                    ),
+                    onPressed: () {
+                      Beamer.of(context).beamBack();
+                    },
+                  ),
                 ),
-                const SizedBox(height: 16),
+                Expanded(
+                  child: AutofillGroup(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Log in',
+                          style: Theme.of(context).textTheme.headlineSmall,
+                        ),
+                        const SizedBox(height: 25),
+                        TextField(
+                          decoration: const InputDecoration(
+                            labelText: 'email',
+                          ),
+                          controller: emailController,
+                          autofillHints: const [AutofillHints.email],
+                        ),
+                        const SizedBox(height: 16),
+                        TextField(
+                          decoration: const InputDecoration(
+                            labelText: 'password',
+                          ),
+                          obscureText: true,
+                          controller: passwordController,
+                          autofillHints: const [AutofillHints.password],
+                        ),
+                        const SizedBox(height: 16),
+                        TextButton(
+                            onPressed: () {
+                              // Email magic link
+                              final email = emailController.text;
+                              if (email.isNotEmpty) {
+                                ref
+                                    .read(authProvider.notifier)
+                                    .sendMagicLink(email);
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Please enter your email'),
+                                  ),
+                                );
+                              }
+                            },
+                            child: const Text('Forgot password?')),
+                      ],
+                    ),
+                  ),
+                ),
                 TonalButton(
                   onPressed: () {},
-                  child: const Text("Register"),
-                )
+                  child: const Text('Login'),
+                ),
               ],
             ),
           ),

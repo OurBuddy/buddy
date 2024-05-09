@@ -4,6 +4,7 @@ import 'package:buddy/screens/welcome/welcome.dart';
 import 'package:buddy/states/providers.dart';
 import 'package:buddy/states/user.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -45,7 +46,7 @@ class Buddy extends HookConsumerWidget {
         ).call,
         guards: [
           BeamGuard(
-            pathPatterns: ['/welcome', '/welcome/*'],
+            pathPatterns: ['/welcome', '/welcome/login'],
             guardNonMatching: true,
             check: (context, location) => ref.read(authProvider).isSignedIn,
             beamToNamed: (origin, target) => '/welcome',
@@ -58,6 +59,36 @@ class Buddy extends HookConsumerWidget {
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.black,
           primary: Colors.black,
+        ),
+        inputDecorationTheme: const InputDecorationTheme(
+          // pill with black border
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(30)),
+            borderSide: BorderSide(color: Colors.black, width: 2),
+          ),
+          // pill with black border
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(30)),
+            borderSide: BorderSide(color: Colors.black, width: 1),
+          ),
+        ),
+        textTheme: const TextTheme(
+          headlineSmall: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        snackBarTheme: SnackBarThemeData(
+          insetPadding: const EdgeInsets.all(18),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(999),
+          ),
+          backgroundColor: Colors.black,
+          contentTextStyle: const TextStyle(
+            color: Colors.white,
+            fontSize: 14,
+          ),
         ),
         useMaterial3: true,
       ),
