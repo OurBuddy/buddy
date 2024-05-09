@@ -1,6 +1,11 @@
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' as sb;
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'providers.dart';
 
@@ -140,6 +145,43 @@ class AuthProvider extends StateNotifier<AuthState> {
         password: password,
       );
 
+      response.session != null
+          ? setAuthenticated(response.session!)
+          : setError("Invalid email or password");
+
+      return response.session != null;
+    } on sb.AuthException catch (e) {
+      setError(e.message);
+    } catch (e) {
+      setError(e.toString());
+    }
+    return false;
+  }
+
+  Future<bool> signInWithApple() async {
+    final rawNonce = _client.generateRawNonce();
+    final hashedNonce = sha256.convert(utf8.encode(rawNonce)).toString();
+
+    try {
+      final credential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+        nonce: hashedNonce,
+      );
+
+      final idToken = credential.identityToken;
+      if (idToken == null) {
+        throw const AuthException(
+            'Could not find ID Token from generated credential.');
+      }
+
+      final response = await _client.signInWithIdToken(
+        provider: OAuthProvider.apple,
+        idToken: idToken,
+        nonce: rawNonce,
+      );
       response.session != null
           ? setAuthenticated(response.session!)
           : setError("Invalid email or password");
