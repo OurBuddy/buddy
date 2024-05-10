@@ -27,7 +27,9 @@ class WelcomeScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 TonalButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Beamer.of(context).beamToNamed("/welcome/register");
+                  },
                   child: const Text("Register"),
                 )
               ],

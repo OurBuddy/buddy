@@ -18,6 +18,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final TextEditingController emailController = useTextEditingController();
     final TextEditingController passwordController = useTextEditingController();
 
+    final auth = ref.watch(authProvider);
+    final authNotif = ref.watch(authProvider.notifier);
+
+    Future.delayed(Duration.zero, () {
+      if (auth.isMagicLinkSent) {
+        authNotif.setInitial();
+        Beamer.of(context).beamToNamed('/welcome/magicLink');
+      }
+      if (auth.isSignedIn) Beamer.of(context).beamToNamed('/');
+    });
+
     return Scaffold(
       body: SizedBox(
         width: double.infinity,
@@ -67,6 +78,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           autofillHints: const [AutofillHints.password],
                         ),
                         const SizedBox(height: 16),
+                        if (auth.error != null)
+                          Text(
+                            "There was an issue logging in: ${auth.error}",
+                            style: const TextStyle(color: Colors.red),
+                          ),
+                        const SizedBox(height: 16),
                         TextButton(
                             onPressed: () {
                               // Email magic link
@@ -89,7 +106,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ),
                 ),
                 TonalButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    final email = emailController.text;
+                    final password = passwordController.text;
+                    if (email.isNotEmpty && password.isNotEmpty) {
+                      authNotif.logInWithPassword(email, password);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Please enter your email and password'),
+                        ),
+                      );
+                    }
+                  },
+                  isLoading: auth.isLoading,
                   child: const Text('Login'),
                 ),
               ],
