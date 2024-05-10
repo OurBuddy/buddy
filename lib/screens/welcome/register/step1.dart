@@ -16,14 +16,14 @@ class _SignUpStep1State extends ConsumerState<SignUpStep1> {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
               // Back button
               Align(
                 alignment: Alignment.topLeft,
                 child: IconButton(
-                  icon: Icon(Icons.chevron_left_rounded, size: 32),
+                  icon: const Icon(Icons.chevron_left_rounded, size: 32),
                   onPressed: () {
                     Beamer.of(context).beamBack();
                   },
