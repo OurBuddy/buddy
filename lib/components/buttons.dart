@@ -7,7 +7,7 @@ class Button extends StatelessWidget {
       required this.child,
       this.isLoading = false});
 
-  final void Function() onPressed;
+  final void Function()? onPressed;
   final Widget child;
   final bool isLoading;
 
@@ -67,7 +67,7 @@ class TonalButton extends StatelessWidget {
       required this.child,
       this.isLoading = false});
 
-  final void Function() onPressed;
+  final void Function()? onPressed;
   final Widget child;
   final bool isLoading;
 

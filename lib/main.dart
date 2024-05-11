@@ -4,6 +4,7 @@ import 'package:buddy/screens/miaDev.dart';
 import 'package:buddy/screens/welcome/login.dart';
 import 'package:buddy/screens/welcome/magicLink.dart';
 import 'package:buddy/screens/welcome/register/step1.dart';
+import 'package:buddy/screens/welcome/register/step2.dart';
 import 'package:buddy/screens/welcome/welcome.dart';
 import 'package:buddy/states/providers.dart';
 import 'package:buddy/states/user.dart';
@@ -108,7 +109,7 @@ class _BuddyState extends ConsumerState<Buddy> {
 
   BeamerDelegate router(BuildContext context, WidgetRef ref) {
     return BeamerDelegate(
-        initialPath: '/franDev',
+        initialPath: '/welcome',
         locationBuilder: RoutesLocationBuilder(
           routes: {
             // Return either Widgets or BeamPages if more customization is needed
@@ -117,6 +118,8 @@ class _BuddyState extends ConsumerState<Buddy> {
             '/welcome/magicLink': (context, state, data) =>
                 const MagicLinkScreen(),
             '/welcome/register': (context, state, data) => const SignUpStep1(),
+            '/welcome/register/step2': (context, state, data) =>
+                const SignUpStep2(),
             '/miaDev': (context, state, data) => const MiaDev(),
             '/franDev': (context, state, data) => const FranDev(),
           },

@@ -67,6 +67,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           ),
                           controller: emailController,
                           autofillHints: const [AutofillHints.email],
+                          keyboardType: TextInputType.emailAddress,
                         ),
                         const SizedBox(height: 16),
                         TextField(
@@ -76,6 +77,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           obscureText: true,
                           controller: passwordController,
                           autofillHints: const [AutofillHints.password],
+                          keyboardType: TextInputType.visiblePassword,
                         ),
                         const SizedBox(height: 16),
                         if (auth.error != null)
