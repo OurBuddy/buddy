@@ -14,46 +14,40 @@ class Button extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      return Hero(
-        tag: 'button',
-        child: SizedBox(
-          width: 48,
-          height: 48,
-          child: Container(
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: Theme.of(context).canvasColor,
-              shape: BoxShape.circle,
-              boxShadow: const [
-                BoxShadow(
-                  color: Colors.black12,
-                  blurRadius: 10,
-                ),
-              ],
-            ),
-            padding: const EdgeInsets.all(10),
-            child: CircularProgressIndicator(
-              color: Theme.of(context).primaryColor,
-              strokeCap: StrokeCap.round,
-            ),
+      return SizedBox(
+        width: 48,
+        height: 48,
+        child: Container(
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: Theme.of(context).canvasColor,
+            shape: BoxShape.circle,
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 10,
+              ),
+            ],
+          ),
+          padding: const EdgeInsets.all(10),
+          child: CircularProgressIndicator(
+            color: Theme.of(context).primaryColor,
+            strokeCap: StrokeCap.round,
           ),
         ),
       );
     }
 
-    return Hero(
-      tag: 'button',
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(
-          maxWidth: 400,
-        ),
-        child: SizedBox(
-          width: double.infinity,
-          height: 48,
-          child: ElevatedButton(
-            onPressed: onPressed,
-            child: child,
-          ),
+    return ConstrainedBox(
+      constraints: const BoxConstraints(
+        maxWidth: 400,
+      ),
+      child: SizedBox(
+        width: double.infinity,
+        height: 48,
+        child: ElevatedButton(
+          onPressed: onPressed,
+          child: child,
         ),
       ),
     );
@@ -74,28 +68,25 @@ class TonalButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      return Hero(
-        tag: 'button',
-        child: SizedBox(
-          width: 48,
-          height: 48,
-          child: Container(
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-              shape: BoxShape.circle,
-              boxShadow: const [
-                BoxShadow(
-                  color: Colors.black12,
-                  blurRadius: 10,
-                ),
-              ],
-            ),
-            padding: const EdgeInsets.all(10),
-            child: CircularProgressIndicator(
-              color: Theme.of(context).canvasColor,
-              strokeCap: StrokeCap.round,
-            ),
+      return SizedBox(
+        width: 48,
+        height: 48,
+        child: Container(
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: Theme.of(context).primaryColor,
+            shape: BoxShape.circle,
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 10,
+              ),
+            ],
+          ),
+          padding: const EdgeInsets.all(10),
+          child: CircularProgressIndicator(
+            color: Theme.of(context).canvasColor,
+            strokeCap: StrokeCap.round,
           ),
         ),
       );

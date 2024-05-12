@@ -5,6 +5,8 @@ import 'package:buddy/screens/welcome/login.dart';
 import 'package:buddy/screens/welcome/magicLink.dart';
 import 'package:buddy/screens/welcome/register/step1.dart';
 import 'package:buddy/screens/welcome/register/step2.dart';
+import 'package:buddy/screens/welcome/register/step3.dart';
+import 'package:buddy/screens/welcome/register/step4.dart';
 import 'package:buddy/screens/welcome/welcome.dart';
 import 'package:buddy/states/providers.dart';
 import 'package:buddy/states/user.dart';
@@ -120,6 +122,9 @@ class _BuddyState extends ConsumerState<Buddy> {
             '/welcome/register': (context, state, data) => const SignUpStep1(),
             '/welcome/register/step2': (context, state, data) =>
                 const SignUpStep2(),
+            '/welcome/register/step3': (context, state, data) => const SignUpStep3(),
+            '/welcome/register/step4': (context, state, data) => const SignUpStep4(),
+
             '/miaDev': (context, state, data) => const MiaDev(),
             '/franDev': (context, state, data) => const FranDev(),
           },

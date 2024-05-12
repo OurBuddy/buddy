@@ -54,7 +54,6 @@ class _SignUpStep1State extends ConsumerState<SignUpStep1> {
               Expanded(
                 child: FutureBuilder<bool>(
                   builder: (context, future) {
-                    print(future.connectionState);
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -62,6 +61,7 @@ class _SignUpStep1State extends ConsumerState<SignUpStep1> {
                         Text(
                           'Create an account',
                           style: Theme.of(context).textTheme.headlineSmall,
+                          textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: 10),
                         const Text(

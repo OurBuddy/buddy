@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:beamer/beamer.dart';
 import 'package:buddy/components/buttons.dart';
-import 'package:buddy/components/loading.dart';
 import 'package:buddy/states/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -53,6 +52,7 @@ class _SignUpStep2State extends ConsumerState<SignUpStep2> {
                       Text(
                         'Let\'s get purrsonal',
                         style: Theme.of(context).textTheme.headlineSmall,
+                        textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 10),
                       const Text(
@@ -90,7 +90,42 @@ class _SignUpStep2State extends ConsumerState<SignUpStep2> {
                       ),
                       const SizedBox(height: 25),
                       Button(
-                        onPressed: () {},
+                        onPressed: () {
+                          try {
+                            signupNotif.setEmail(email.text);
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content:
+                                    Text(e.toString().split(':')[1].trim()),
+                              ),
+                            );
+                          }
+
+                          //Passwords match
+                          if (password.text != confirmPassword.text) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Passwords do not match'),
+                              ),
+                            );
+                            return;
+                          }
+
+                          try {
+                            signupNotif.setPassword(password.text);
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content:
+                                    Text(e.toString().split(':')[1].trim()),
+                              ),
+                            );
+                          }
+
+                          Beamer.of(context)
+                              .beamToNamed('/welcome/register/step3');
+                        },
                         child: const Text('Next'),
                       ),
                     ],
