@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:image_picker/image_picker.dart';
 
 class Profile {
   final String id;
@@ -10,6 +11,7 @@ class Profile {
   final String petName;
   final String username;
   final String? bio;
+  final String? imageUrl;
 
   // Private properties
   final ProfilePrivate? private;
@@ -25,6 +27,7 @@ class Profile {
     this.bio,
     this.private,
     this.userDetails,
+    this.imageUrl,
   });
 
   Profile copyWith({
@@ -35,6 +38,7 @@ class Profile {
     String? bio,
     ProfilePrivate? private,
     UserDetails? userDetails,
+    String? imageUrl,
   }) {
     return Profile(
       id: id ?? this.id,
@@ -44,6 +48,7 @@ class Profile {
       bio: bio ?? this.bio,
       private: private ?? this.private,
       userDetails: userDetails ?? this.userDetails,
+      imageUrl: imageUrl ?? this.imageUrl,
     );
   }
 
@@ -56,6 +61,7 @@ class Profile {
       'bio': bio,
       'private': private?.toMap(),
       'userDetails': userDetails?.toMap(),
+      'imageUrl': imageUrl,
     };
   }
 
@@ -67,6 +73,7 @@ class Profile {
       'username': username,
       'bio': bio,
       'lastModifiedAt': DateTime.now().toUtc().toIso8601String(),
+      'profilePic': imageUrl,
     };
   }
 
@@ -83,6 +90,7 @@ class Profile {
       userDetails: map['userDetails'] != null
           ? UserDetails.fromMap(Map<String, dynamic>.from(map['userDetails']))
           : null,
+      imageUrl: map['imageUrl'],
     );
   }
 
@@ -93,7 +101,7 @@ class Profile {
 
   @override
   String toString() {
-    return 'Profile(id: $id, personName: $personName, petName: $petName, username: $username, bio: $bio, private: $private, userDetails: $userDetails)';
+    return 'Profile(id: $id, personName: $personName, petName: $petName, username: $username, bio: $bio, private: $private, userDetails: $userDetails, imageUrl: $imageUrl)';
   }
 
   @override
@@ -107,7 +115,8 @@ class Profile {
         other.username == username &&
         other.bio == bio &&
         other.private == private &&
-        other.userDetails == userDetails;
+        other.userDetails == userDetails &&
+        other.imageUrl == imageUrl;
   }
 
   @override
@@ -118,7 +127,8 @@ class Profile {
         username.hashCode ^
         bio.hashCode ^
         private.hashCode ^
-        userDetails.hashCode;
+        userDetails.hashCode ^
+        imageUrl.hashCode;
   }
 }
 

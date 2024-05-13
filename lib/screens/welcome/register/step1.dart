@@ -31,7 +31,10 @@ class _SignUpStep1State extends ConsumerState<SignUpStep1> {
     useEffect(() {
       isUserAvailable = signupNotif.checkUsername(username: usernameDebounce);
 
-      return null;
+      // Cancel the future when the widget is disposed
+      return () {
+        isUserAvailable = Future.value(false);
+      };
     }, [usernameDebounce]);
 
     return Scaffold(

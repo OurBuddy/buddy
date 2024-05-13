@@ -75,8 +75,10 @@ class AuthProvider extends StateNotifier<AuthState> {
 
   void setAuthenticated(sb.Session session) {
     state = AuthState.authenticated(session);
-    ref.read(userProvider.notifier).setUser(session.user);
-    ref.read(userProvider.notifier).getProfile();
+    Future.delayed(Duration.zero, () {
+      ref.read(userProvider.notifier).setUser(session.user);
+      ref.read(userProvider.notifier).getProfile();
+    });
   }
 
   Future<void> setInitial() async {

@@ -78,6 +78,24 @@ class _SignUpStep4State extends ConsumerState<SignUpStep4> {
                     const SizedBox(height: 25),
                     Button(
                       onPressed: () {
+                        //check
+                        if (person.text.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Please enter your name'),
+                            ),
+                          );
+                          return;
+                        }
+                        if ((signup.hasPet ?? false) && pet.text.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Please enter your buddy\'s name'),
+                            ),
+                          );
+                          return;
+                        }
+
                         signupNotif.setPersonName(person.text);
                         signupNotif.setPetName(pet.text);
 

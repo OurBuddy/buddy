@@ -2,9 +2,12 @@ import 'dart:convert';
 
 import 'package:buddy/data/profile.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:hive/hive.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:image_compression_flutter/image_compression_flutter.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:universal_io/io.dart';
 
 import 'providers.dart';
 
@@ -417,6 +420,39 @@ class UserProvider extends StateNotifier<UserState> {
 
       return newProfile;
     }
+  }
+
+  Future<void> updateProfilePic(File image) async {
+    Configuration config = const Configuration(
+      outputType: ImageOutputType.jpg,
+      quality: 40,
+    );
+
+    final compImg = await compressor.compress(ImageFileConfiguration(
+      input: ImageFile(
+        filePath: image.absolute.path,
+        rawBytes: image.readAsBytesSync(),
+      ),
+      config: config,
+    ));
+
+    // Print size
+    print("Original size: ${image.lengthSync()}");
+    print("Compressed size: ${compImg.rawBytes.length}");
+
+    await Supabase.instance.client.storage.from("profile-pics").uploadBinary(
+          "${state.profile!.id}/profile.jpg",
+          compImg.rawBytes,
+          fileOptions: const FileOptions(
+            cacheControl: "3600",
+            contentType: "image/jpg",
+          ),
+        );
+
+    await updateProfile(state.profile!.copyWith(
+        imageUrl: Supabase.instance.client.storage
+            .from("profile-pics")
+            .getPublicUrl("${state.profile!.id}/profile.png")));
   }
 
   void logout() {

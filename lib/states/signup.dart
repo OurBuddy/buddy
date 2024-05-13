@@ -1,8 +1,12 @@
 import 'dart:convert';
 
+import 'package:buddy/data/profile.dart';
+import 'package:buddy/states/providers.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:universal_io/io.dart';
 
 class SignupState {
   String? email;
@@ -11,6 +15,7 @@ class SignupState {
   String? petName;
   String? personName;
   bool? hasPet;
+  XFile? image;
 
   SignupState({
     this.email,
@@ -19,22 +24,26 @@ class SignupState {
     this.petName,
     this.personName,
     this.hasPet,
+    this.image,
   });
 
   static final _emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
 
-  bool get isValid =>
-      email != null &&
-      email!.isNotEmpty &&
-      email!.contains(_emailRegex) &&
-      password != null &&
-      password!.isNotEmpty &&
-      username != null &&
-      username!.isNotEmpty &&
-      petName != null &&
-      petName!.isNotEmpty &&
-      personName != null &&
-      personName!.isNotEmpty;
+  bool get isValid => email != null &&
+          email!.isNotEmpty &&
+          email!.contains(_emailRegex) &&
+          password != null &&
+          password!.isNotEmpty &&
+          username != null &&
+          username!.isNotEmpty &&
+          personName != null &&
+          personName!.isNotEmpty &&
+          image != null &&
+          hasPet != null
+      ? hasPet!
+          ? petName != null && petName!.isNotEmpty
+          : true
+      : false;
 
   SignupState copyWith({
     ValueGetter<String?>? email,
@@ -43,6 +52,7 @@ class SignupState {
     ValueGetter<String?>? petName,
     ValueGetter<String?>? personName,
     ValueGetter<bool>? hasPet,
+    ValueGetter<XFile?>? image,
   }) {
     return SignupState(
       email: email != null ? email() : this.email,
@@ -51,6 +61,7 @@ class SignupState {
       petName: petName != null ? petName() : this.petName,
       personName: personName != null ? personName() : this.personName,
       hasPet: hasPet != null ? hasPet() : this.hasPet,
+      image: image != null ? image() : this.image,
     );
   }
 
@@ -181,6 +192,10 @@ class SignupProvider extends StateNotifier<SignupState> {
     return await checkUsername();
   }
 
+  Future<void> setProfilePic(XFile? image) async {
+    state = state.copyWith(image: () => image);
+  }
+
   Future<bool> checkUsername({String? username}) async {
     username ??= state.username;
     if (username == null || username.isEmpty || username.length < 3) {
@@ -188,8 +203,59 @@ class SignupProvider extends StateNotifier<SignupState> {
     }
 
     final response =
-        await _client.from('profile').select().eq('username', state.username!);
+        await _client.from('profile').count().eq('username', username);
 
-    return response.isEmpty;
+    print("response: $response, username: $username");
+
+    return response == 0;
+  }
+
+  Future<void> lastStep() async {
+    await ref.read(userProvider.notifier).updateProfile(
+          Profile(
+            id: ref.read(authProvider).session!.user.id,
+            personName: state.personName!,
+            petName: state.petName!,
+            username: state.username!,
+            private: ProfilePrivate(
+              public: false,
+              pushIds: [],
+              blockedUsers: [],
+            ),
+          ),
+        );
+
+    await ref.read(userProvider.notifier).updateProfilePic(
+          File(state.image!.path),
+        );
+  }
+
+  Future<void> createUser() async {
+    // Verify all is valid
+    if (!state.isValid) {
+      throw Exception('Some information is missing, please check again.');
+    }
+
+    final response = await _client.auth.signUp(
+      email: state.email!,
+      password: state.password!,
+    );
+
+    ref.read(authProvider.notifier).setAuthenticated(response.session!);
+
+    await Future.delayed(Duration.zero, () async {
+      await ref.read(userProvider.notifier).updateProfile(
+            Profile(
+              id: response.user!.id,
+              personName: state.personName!,
+              petName: state.petName!,
+              username: state.username!,
+            ),
+          );
+
+      await ref.read(userProvider.notifier).updateProfilePic(
+            File(state.image!.path),
+          );
+    });
   }
 }

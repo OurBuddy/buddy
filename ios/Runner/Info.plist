@@ -45,5 +45,11 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Allow access to photo library in order to upload pictures to Buddy</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Allow access to camera in order to take pictures for Buddy</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Allow access to microphone in order to record audio and video for Buddy</string>
 </dict>
 </plist>
