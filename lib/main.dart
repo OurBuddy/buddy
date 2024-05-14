@@ -9,7 +9,6 @@ import 'package:buddy/screens/welcome/register/step3.dart';
 import 'package:buddy/screens/welcome/register/step4.dart';
 import 'package:buddy/screens/welcome/register/step5.dart';
 import 'package:buddy/screens/welcome/welcome.dart';
-import 'package:buddy/states/providers.dart';
 import 'package:buddy/states/user.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -82,6 +81,17 @@ class _BuddyState extends ConsumerState<Buddy> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
             side: const BorderSide(color: Colors.black, width: 2),
+          ),
+        ),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.white,
+          elevation: 100,
+          iconTheme: IconThemeData(color: Colors.black),
+          actionsIconTheme: IconThemeData(color: Colors.black),
+          titleTextStyle: TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
           ),
         ),
         textTheme: const TextTheme(
