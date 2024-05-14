@@ -55,6 +55,7 @@ class _BuddyState extends ConsumerState<Buddy> {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'Buddy',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.black,
