@@ -1,6 +1,5 @@
 import 'package:beamer/beamer.dart';
-import 'package:buddy/screens/franDev.dart';
-import 'package:buddy/screens/miaDev.dart';
+import 'package:buddy/screens/home/feed.dart';
 import 'package:buddy/screens/welcome/login.dart';
 import 'package:buddy/screens/welcome/magicLink.dart';
 import 'package:buddy/screens/welcome/register/create.dart';
@@ -113,7 +112,7 @@ class _BuddyState extends ConsumerState<Buddy> {
 
   BeamerDelegate router(BuildContext context, WidgetRef ref) {
     return BeamerDelegate(
-        initialPath: '/welcome',
+        initialPath: '/feed',
         locationBuilder: RoutesLocationBuilder(
           routes: {
             // Return either Widgets or BeamPages if more customization is needed
@@ -133,17 +132,16 @@ class _BuddyState extends ConsumerState<Buddy> {
             '/welcome/register/create': (context, state, data) =>
                 const CreateScreen(),
 
-            '/miaDev': (context, state, data) => const MiaDev(),
-            '/franDev': (context, state, data) => const FranDev(),
+            '/feed': (p0, p1, p2) => FeedScreen(),
           },
         ).call,
         guards: [
-          BeamGuard(
-            pathPatterns: ['/welcome', '/welcome/*'],
-            guardNonMatching: true,
-            check: (context, location) => ref.read(authProvider).isSignedIn,
-            beamToNamed: (origin, target) => '/welcome',
-          ),
+          // BeamGuard(
+          //   pathPatterns: ['/welcome', '/welcome/*'],
+          //   guardNonMatching: true,
+          //   check: (context, location) => ref.read(authProvider).isSignedIn,
+          //   beamToNamed: (origin, target) => '/welcome',
+          // ),
         ]);
   }
 }

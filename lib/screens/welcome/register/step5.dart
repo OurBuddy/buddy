@@ -106,8 +106,9 @@ class _CreateState extends ConsumerState<SignUpStep5> {
                                           signupNotif.setProfilePic(pickedFile);
                                         }
 
-                                        if (mounted)
+                                        if (mounted) {
                                           Navigator.of(context).pop();
+                                        }
                                       } catch (e) {
                                         return;
                                       }
