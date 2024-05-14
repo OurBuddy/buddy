@@ -6,15 +6,15 @@ class FeedScreen extends StatelessWidget {
   static final List<Map<String, dynamic>> _posts = [
     {
       'username': 'Simba',
-      'userImageUrl': 'assets/images/simba1.jpg',
-      'postImageUrl': 'assets/images/simba2.jpg',
+      'userImageUrl': 'assets/images/simba1.jpeg',
+      'postImageUrl': 'assets/images/simba2.jpeg',
       'caption': 'wena amigos',
       'likes': 150,
     },
     {
       'username': 'Coquitz',
-      'userImageUrl': 'assets/images/coquita1.jpg',
-      'postImageUrl': 'assets/images/coquita2.jpg',
+      'userImageUrl': 'assets/images/coquita1.jpeg',
+      'postImageUrl': 'assets/images/coquita2.jpeg',
       'caption': 'Hola chicos soy coquita pero me dicen coquitz',
       'likes': 85,
     },
