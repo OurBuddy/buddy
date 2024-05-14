@@ -1,6 +1,8 @@
+import 'package:buddy/components/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:buddy/components/textPost.dart';
 import 'package:buddy/components/imagePost.dart';
+import 'package:flutter_svg/svg.dart';
 
 class FeedScreen extends StatelessWidget {
   final List<Map<String, dynamic>> _posts = [
@@ -45,20 +47,12 @@ class FeedScreen extends StatelessWidget {
     // Add more posts as needed
   ];
 
+  // custom 100px height appbar
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Feed'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {
-              Navigator.pushNamed(context, '/create-post');
-            },
-          ),
-        ],
-      ),
+      appBar: const AppBarBuddy(),
       body: ListView.builder(
         itemCount: _posts.length,
         itemBuilder: (context, index) {
