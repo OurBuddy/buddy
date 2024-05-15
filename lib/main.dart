@@ -1,6 +1,5 @@
 import 'package:beamer/beamer.dart';
-import 'package:buddy/screens/franDev.dart';
-import 'package:buddy/screens/miaDev.dart';
+import 'package:buddy/screens/home/feed.dart';
 import 'package:buddy/screens/welcome/login.dart';
 import 'package:buddy/screens/welcome/magicLink.dart';
 import 'package:buddy/screens/welcome/register/create.dart';
@@ -10,7 +9,6 @@ import 'package:buddy/screens/welcome/register/step3.dart';
 import 'package:buddy/screens/welcome/register/step4.dart';
 import 'package:buddy/screens/welcome/register/step5.dart';
 import 'package:buddy/screens/welcome/welcome.dart';
-import 'package:buddy/states/providers.dart';
 import 'package:buddy/states/user.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -56,6 +54,7 @@ class _BuddyState extends ConsumerState<Buddy> {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'Buddy',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.black,
@@ -83,6 +82,17 @@ class _BuddyState extends ConsumerState<Buddy> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
             side: const BorderSide(color: Colors.black, width: 2),
+          ),
+        ),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.white,
+          elevation: 100,
+          iconTheme: IconThemeData(color: Colors.black),
+          actionsIconTheme: IconThemeData(color: Colors.black),
+          titleTextStyle: TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
           ),
         ),
         textTheme: const TextTheme(
@@ -113,7 +123,7 @@ class _BuddyState extends ConsumerState<Buddy> {
 
   BeamerDelegate router(BuildContext context, WidgetRef ref) {
     return BeamerDelegate(
-        initialPath: '/welcome',
+        initialPath: '/feed',
         locationBuilder: RoutesLocationBuilder(
           routes: {
             // Return either Widgets or BeamPages if more customization is needed
@@ -133,17 +143,16 @@ class _BuddyState extends ConsumerState<Buddy> {
             '/welcome/register/create': (context, state, data) =>
                 const CreateScreen(),
 
-            '/miaDev': (context, state, data) => const MiaDev(),
-            '/franDev': (context, state, data) => const FranDev(),
+            '/feed': (p0, p1, p2) => FeedScreen(),
           },
         ).call,
         guards: [
-          BeamGuard(
-            pathPatterns: ['/welcome', '/welcome/*'],
-            guardNonMatching: true,
-            check: (context, location) => ref.read(authProvider).isSignedIn,
-            beamToNamed: (origin, target) => '/welcome',
-          ),
+          // BeamGuard(
+          //   pathPatterns: ['/welcome', '/welcome/*'],
+          //   guardNonMatching: true,
+          //   check: (context, location) => ref.read(authProvider).isSignedIn,
+          //   beamToNamed: (origin, target) => '/welcome',
+          // ),
         ]);
   }
 }

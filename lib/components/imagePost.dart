@@ -4,21 +4,23 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart'; // Import flutter_svg
 
-class TextPost extends StatefulWidget {
+class ImagePost extends StatefulWidget {
   final String username;
   final String petowner;
   final String userImageUrl;
+  final String postImageUrl;
   final String caption;
   final int likes;
   final int comments;
   final int sends;
   final List<Map<String, String>> topcomments; // List of top comments
 
-  const TextPost({
+  const ImagePost({
     super.key,
     required this.username,
     required this.petowner,
     required this.userImageUrl,
+    required this.postImageUrl,
     required this.caption,
     required this.likes,
     required this.comments,
@@ -27,10 +29,10 @@ class TextPost extends StatefulWidget {
   });
 
   @override
-  State<TextPost> createState() => _TextPostState();
+  State<ImagePost> createState() => _ImagePostState();
 }
 
-class _TextPostState extends State<TextPost> {
+class _ImagePostState extends State<ImagePost> {
   String getUserName(Map<String, String> comment) {
     return comment.entries
         .firstWhere((entry) => entry.key.startsWith('user'))
@@ -63,14 +65,11 @@ class _TextPostState extends State<TextPost> {
               ),
             ),
           ),
-          Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            child: Text(
-              widget.caption,
-              style: TextStyle(fontSize: 18), // Set the caption font size to 18
-            ),
-          ),
+          Image.asset(widget.postImageUrl,
+              errorBuilder: (context, error, stackTrace) {
+            return Icon(
+                Icons.error); // Provide a fallback icon in case of error
+          }),
           Padding(
             padding:
                 const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
@@ -91,6 +90,22 @@ class _TextPostState extends State<TextPost> {
                 SizedBox(width: 8),
                 Text('${widget.sends}'),
               ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                      text: '${widget.username} ',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black)),
+                  TextSpan(
+                      text: widget.caption,
+                      style: TextStyle(color: Colors.black)),
+                ],
+              ),
             ),
           ),
           Padding(
