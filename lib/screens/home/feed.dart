@@ -1,8 +1,8 @@
 import 'package:buddy/components/appbar.dart';
 import 'package:buddy/components/navbar.dart';
+import 'package:buddy/components/textPost.dart';
 import 'package:flutter/material.dart';
 import 'package:buddy/components/imagePost.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class FeedScreen extends StatefulHookConsumerWidget {
@@ -85,12 +85,12 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
     return Scaffold(
       appBar: const AppBarBuddy(),
       body: BottomNav(body: (context, scroll) {
-         return ListView.builder(
+        return ListView.builder(
           itemCount: _posts.length,
           itemBuilder: (context, index) {
             final post = _posts[index];
             if (post['type'] == 'image') {
-              return image_widgets.ImagePost(
+              return ImagePost(
                 username: post['username'],
                 petowner: post['petowner'],
                 userImageUrl: post['userImageUrl'],
@@ -102,7 +102,7 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                 topcomments: post['topcomments'],
               );
             } else {
-              return text_widgets.TextPost(
+              return TextPost(
                 username: post['username'],
                 petowner: post['petowner'],
                 userImageUrl: post['userImageUrl'],

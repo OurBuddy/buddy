@@ -99,7 +99,7 @@ class _BottomNavState extends ConsumerState<BottomNav> {
                       : Colors.transparent,
                 ),
                 label: Text(
-                  "Profile",
+                  "Buddy",
                   style: TextStyle(
                     color: loc.path.startsWith("/profile")
                         ? Colors.white
