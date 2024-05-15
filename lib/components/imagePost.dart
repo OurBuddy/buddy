@@ -1,6 +1,3 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart'; // Import flutter_svg
 
@@ -52,14 +49,14 @@ class _ImagePostState extends State<ImagePost> {
             ),
             title: RichText(
               text: TextSpan(
-                style: TextStyle(fontSize: 16, color: Colors.black),
+                style: const TextStyle(fontSize: 16, color: Colors.black),
                 children: [
                   TextSpan(
                       text: widget.username,
-                      style: TextStyle(fontWeight: FontWeight.bold)),
+                      style: const TextStyle(fontWeight: FontWeight.bold)),
                   TextSpan(
                       text: '\n${widget.petowner}',
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontWeight: FontWeight.normal, fontSize: 14)),
                 ],
               ),
@@ -67,7 +64,7 @@ class _ImagePostState extends State<ImagePost> {
           ),
           Image.asset(widget.postImageUrl,
               errorBuilder: (context, error, stackTrace) {
-            return Icon(
+            return const Icon(
                 Icons.error); // Provide a fallback icon in case of error
           }),
           Padding(
@@ -77,33 +74,34 @@ class _ImagePostState extends State<ImagePost> {
               children: [
                 SvgPicture.asset('assets/icons/Posts/filledHeart.svg',
                     width: 22, height: 19),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 Text('${widget.likes}'),
-                SizedBox(width: 16),
+                const SizedBox(width: 16),
                 SvgPicture.asset('assets/icons/Posts/filledComment.svg',
                     width: 22, height: 19),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 Text('${widget.comments}'),
-                SizedBox(width: 16),
+                const SizedBox(width: 16),
                 SvgPicture.asset('assets/icons/Posts/filledSend.svg',
                     width: 22, height: 19),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 Text('${widget.sends}'),
               ],
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(8),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: RichText(
               text: TextSpan(
                 children: [
                   TextSpan(
                       text: '${widget.username} ',
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontWeight: FontWeight.bold, color: Colors.black)),
                   TextSpan(
                       text: widget.caption,
-                      style: TextStyle(color: Colors.black)),
+                      style: const TextStyle(color: Colors.black)),
                 ],
               ),
             ),
@@ -118,32 +116,34 @@ class _ImagePostState extends State<ImagePost> {
                     print('View all comments clicked.');
                     // Implement navigation or logic to show all comments
                   },
-                  child: Text(
+                  child: const Text(
                     'View all comments',
                     style: TextStyle(color: Color(0xFF898989), fontSize: 14),
                   ),
                 ),
-                ...widget.topcomments
-                    .map((comment) => Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 2),
-                          child: RichText(
-                            text: TextSpan(
-                              children: [
-                                TextSpan(
-                                    text: "${getUserName(comment)}: ",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 12,
-                                        color: Colors.black)),
-                                TextSpan(
-                                    text: comment['text'],
-                                    style: TextStyle(
-                                        fontSize: 12, color: Colors.black)),
-                              ],
-                            ),
-                          ),
-                        ))
-                    .toList(),
+                const SizedBox(height: 4),
+                ...widget.topcomments.map(
+                  (comment) => Padding(
+                    padding: const EdgeInsets.only(top: 6),
+                    child: RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                              text: "${getUserName(comment)}: ",
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12,
+                                  color: Colors.black)),
+                          TextSpan(
+                              text: comment['text'],
+                              style: const TextStyle(
+                                  fontSize: 12, color: Colors.black)),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
               ],
             ),
           ),
