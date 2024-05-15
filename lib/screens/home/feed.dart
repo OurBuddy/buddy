@@ -1,11 +1,19 @@
 import 'package:buddy/components/appbar.dart';
+import 'package:buddy/components/navbar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:buddy/components/textPost.dart' as text_widgets;
-import 'package:buddy/components/imagePost.dart' as image_widgets;
+import 'package:buddy/components/imagePost.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class FeedScreen extends StatelessWidget {
-  List<Map<String, dynamic>> _posts = [
+class FeedScreen extends StatefulHookConsumerWidget {
+  const FeedScreen({super.key});
+
+  @override
+  ConsumerState<FeedScreen> createState() => _FeedScreenState();
+}
+
+class _FeedScreenState extends ConsumerState<FeedScreen> {
+  final List<Map<String, dynamic>> _posts = [
     {
       'type': 'image',
       'username': 'Simba',
@@ -72,43 +80,43 @@ class FeedScreen extends StatelessWidget {
     // Add more posts as needed
   ];
 
-  // custom 100px height appbar
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const AppBarBuddy(),
+      body: BottomNav(body: (context, scroll) {
+         return ListView.builder(
+          itemCount: _posts.length,
+          itemBuilder: (context, index) {
+            final post = _posts[index];
+            if (post['type'] == 'image') {
+              return image_widgets.ImagePost(
+                username: post['username'],
+                petowner: post['petowner'],
+                userImageUrl: post['userImageUrl'],
+                postImageUrl: post['postImageUrl'],
+                caption: post['caption'],
+                likes: post['likes'] ?? 0,
+                comments: post['comments'] ?? 0,
+                sends: post['sends'] ?? 0,
+                topcomments: post['topcomments'],
+              );
+            } else {
+              return text_widgets.TextPost(
+                username: post['username'],
+                petowner: post['petowner'],
+                userImageUrl: post['userImageUrl'],
+                caption: post['caption'],
+                likes: post['likes'] ?? 0,
+                comments: post['comments'] ?? 0,
+                sends: post['sends'] ?? 0,
+                topcomments: post['topcomments'],
+              );
+            }
+          },
+        );
+      }),
       backgroundColor: Color(0xFFE7E6E6),
-      body: ListView.builder(
-        itemCount: _posts.length,
-        itemBuilder: (context, index) {
-          final post = _posts[index];
-          if (post['type'] == 'image') {
-            return image_widgets.ImagePost(
-              username: post['username'],
-              petowner: post['petowner'],
-              userImageUrl: post['userImageUrl'],
-              postImageUrl: post['postImageUrl'],
-              caption: post['caption'],
-              likes: post['likes'] ?? 0,
-              comments: post['comments'] ?? 0,
-              sends: post['sends'] ?? 0,
-              topcomments: post['topcomments'],
-            );
-          } else {
-            return text_widgets.TextPost(
-              username: post['username'],
-              petowner: post['petowner'],
-              userImageUrl: post['userImageUrl'],
-              caption: post['caption'],
-              likes: post['likes'] ?? 0,
-              comments: post['comments'] ?? 0,
-              sends: post['sends'] ?? 0,
-              topcomments: post['topcomments'],
-            );
-          }
-        },
-      ),
     );
   }
 }
