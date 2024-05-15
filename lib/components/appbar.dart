@@ -19,8 +19,6 @@ class AppBarBuddy extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       centerTitle: false,
       toolbarHeight: 65,
-      backgroundColor: Colors.white,
-      elevation: 0,
       titleSpacing: 16,
       title: Align(
         alignment: Alignment.centerLeft,

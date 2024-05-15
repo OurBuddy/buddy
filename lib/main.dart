@@ -1,5 +1,4 @@
 import 'package:beamer/beamer.dart';
-import 'package:buddy/components/navbar.dart';
 import 'package:buddy/screens/home/feed.dart';
 import 'package:buddy/screens/welcome/login.dart';
 import 'package:buddy/screens/welcome/magicLink.dart';
