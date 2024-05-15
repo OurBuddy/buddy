@@ -35,83 +35,77 @@ class _BottomNavState extends ConsumerState<BottomNav> {
           width: double.infinity,
           child: Row(
             children: [
-              Expanded(
-                child: TextButton.icon(
-                  onPressed: () {},
-                  icon: Image.asset(
-                    loc.path.startsWith("/feed")
-                        ? "assets/icons/home-color.png"
-                        : "assets/icons/home-clay.png",
-                    width: 34,
-                  ),
-                  style: TextButton.styleFrom(
-                    backgroundColor: loc.path.startsWith("/feed")
-                        ? Colors.black
-                        : Colors.transparent,
-                  ),
-                  label: Text(
-                    "Home",
-                    style: TextStyle(
-                      color: loc.path.startsWith("/feed")
-                          ? Colors.white
-                          : Colors.black,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                    ),
+              TextButton.icon(
+                onPressed: () {},
+                icon: Image.asset(
+                  loc.path.startsWith("/feed")
+                      ? "assets/icons/home-color.png"
+                      : "assets/icons/home-clay.png",
+                  width: 34,
+                ),
+                style: TextButton.styleFrom(
+                  backgroundColor: loc.path.startsWith("/feed")
+                      ? Colors.black
+                      : Colors.transparent,
+                ),
+                label: Text(
+                  "Home",
+                  style: TextStyle(
+                    color: loc.path.startsWith("/feed")
+                        ? Colors.white
+                        : Colors.black,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
               const SizedBox(width: 4),
-              Expanded(
-                child: TextButton.icon(
-                  onPressed: () {},
-                  icon: Image.asset(
-                    loc.path.startsWith("/chat")
-                        ? "assets/icons/chat-color.png"
-                        : "assets/icons/chat-clay.png",
-                    width: 34,
-                  ),
-                  style: TextButton.styleFrom(
-                    backgroundColor: loc.path.startsWith("/chat")
-                        ? Colors.black
-                        : Colors.transparent,
-                  ),
-                  label: Text(
-                    "Chats",
-                    style: TextStyle(
-                      color: loc.path.startsWith("/chat")
-                          ? Colors.white
-                          : Colors.black,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                    ),
+              TextButton.icon(
+                onPressed: () {},
+                icon: Image.asset(
+                  loc.path.startsWith("/chat")
+                      ? "assets/icons/chat-color.png"
+                      : "assets/icons/chat-clay.png",
+                  width: 34,
+                ),
+                style: TextButton.styleFrom(
+                  backgroundColor: loc.path.startsWith("/chat")
+                      ? Colors.black
+                      : Colors.transparent,
+                ),
+                label: Text(
+                  "Chats",
+                  style: TextStyle(
+                    color: loc.path.startsWith("/chat")
+                        ? Colors.white
+                        : Colors.black,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
               const SizedBox(width: 4),
-              Expanded(
-                child: TextButton.icon(
-                  onPressed: () {},
-                  icon: Image.asset(
-                    loc.path.startsWith("/profile")
-                        ? "assets/icons/paw-color.png"
-                        : "assets/icons/paw-clay.png",
-                    width: 34,
-                  ),
-                  style: TextButton.styleFrom(
-                    backgroundColor: loc.path.startsWith("/profile")
-                        ? Colors.black
-                        : Colors.transparent,
-                  ),
-                  label: Text(
-                    "Me",
-                    style: TextStyle(
-                      color: loc.path.startsWith("/profile")
-                          ? Colors.white
-                          : Colors.black,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                    ),
+              TextButton.icon(
+                onPressed: () {},
+                icon: Image.asset(
+                  loc.path.startsWith("/profile")
+                      ? "assets/icons/paw-color.png"
+                      : "assets/icons/paw-clay.png",
+                  width: 34,
+                ),
+                style: TextButton.styleFrom(
+                  backgroundColor: loc.path.startsWith("/profile")
+                      ? Colors.black
+                      : Colors.transparent,
+                ),
+                label: Text(
+                  "Profile",
+                  style: TextStyle(
+                    color: loc.path.startsWith("/profile")
+                        ? Colors.white
+                        : Colors.black,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
