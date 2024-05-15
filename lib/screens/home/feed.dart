@@ -1,10 +1,18 @@
 import 'package:buddy/components/appbar.dart';
+import 'package:buddy/components/navbar.dart';
 import 'package:flutter/material.dart';
-import 'package:buddy/components/textPost.dart';
 import 'package:buddy/components/imagePost.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class FeedScreen extends StatelessWidget {
+class FeedScreen extends StatefulHookConsumerWidget {
+  const FeedScreen({super.key});
+
+  @override
+  ConsumerState<FeedScreen> createState() => _FeedScreenState();
+}
+
+class _FeedScreenState extends ConsumerState<FeedScreen> {
   final List<Map<String, dynamic>> _posts = [
     {
       'username': 'Simba',
@@ -47,27 +55,27 @@ class FeedScreen extends StatelessWidget {
     // Add more posts as needed
   ];
 
-  // custom 100px height appbar
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const AppBarBuddy(),
-      body: ListView.builder(
-        itemCount: _posts.length,
-        itemBuilder: (context, index) {
-          final post = _posts[index];
-          return ImagePost(
-            username: post['username'],
-            userImageUrl: post['userImageUrl'],
-            postImageUrl: post['postImageUrl'],
-            caption: post['caption'],
-            likes: post['likes'] ?? 0,
-            comments: post['comments'] ?? 0,
-            sends: post['sends'] ?? 0,
-          );
-        },
-      ),
+      body: BottomNav(body: (context, scroll) {
+        return ListView.builder(
+          controller: scroll,
+          itemCount: _posts.length,
+          itemBuilder: (context, index) {
+            return ImagePost(
+              username: _posts[index]['username'],
+              userImageUrl: _posts[index]['userImageUrl'],
+              postImageUrl: _posts[index]['postImageUrl'],
+              caption: _posts[index]['caption'],
+              likes: _posts[index]['likes'],
+              comments: _posts[index]['comments'],
+              sends: _posts[index]['sends'],
+            );
+          },
+        );
+      }),
     );
   }
 }
