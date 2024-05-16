@@ -10,12 +10,44 @@ class MiaDev extends StatefulWidget {
 }
 
 class _MiaDevState extends State<MiaDev> {
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Center(child: TextPost()),
-      ),
+        // PROFILE BAR
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: Column(
+                children: <Widget>[
+                  Text('#', textAlign: TextAlign.center), // # of followers
+                  Text('buddies', textAlign: TextAlign.center),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Column(
+                children: <Widget>[
+                  Text('#', textAlign: TextAlign.center), // # of pics
+                  Text('pics', textAlign: TextAlign.center),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Column(
+                children: <Widget>[
+                  Text('#', textAlign: TextAlign.center), // # of posts
+                  Text('posts', textAlign: TextAlign.center),
+                ],
+              ),
+            ),
+          ],
+        )
+        //END OF PROFILE
+      )
     );
   }
 }
+//trying to edit
+
