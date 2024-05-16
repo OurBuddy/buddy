@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:image_picker/image_picker.dart';
 
 class Profile {
   final String id;

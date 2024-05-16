@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:buddy/data/profile.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:hive/hive.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_compression_flutter/image_compression_flutter.dart';
