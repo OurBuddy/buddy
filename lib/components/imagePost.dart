@@ -39,27 +39,45 @@ class _ImagePostState extends State<ImagePost> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.all(8),
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           ListTile(
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: 4.0,
+            ),
             leading: CircleAvatar(
               backgroundImage: AssetImage(widget.userImageUrl),
             ),
             title: RichText(
               text: TextSpan(
-                style: const TextStyle(fontSize: 16, color: Colors.black),
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                ),
                 children: [
                   TextSpan(
                       text: widget.username,
                       style: const TextStyle(fontWeight: FontWeight.bold)),
                   TextSpan(
-                      text: '\n${widget.petowner}',
-                      style: const TextStyle(
-                          fontWeight: FontWeight.normal, fontSize: 14)),
+                    text: '\n${widget.petowner}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      fontSize: 12,
+                      color: Colors.black.withOpacity(0.5),
+                    ),
+                  ),
                 ],
               ),
+            ),
+            trailing: IconButton(
+              icon: const Icon(Icons.more_horiz_rounded),
+              onPressed: () {
+                print('More options clicked.');
+                // Implement more options logic
+              },
             ),
           ),
           Image.asset(widget.postImageUrl,

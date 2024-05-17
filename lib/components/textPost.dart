@@ -37,7 +37,7 @@ class _TextPostState extends State<TextPost> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.all(8),
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[

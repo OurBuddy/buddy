@@ -113,7 +113,17 @@ class _BuddyState extends ConsumerState<Buddy> {
             fontSize: 14,
           ),
         ),
+        cardTheme: CardTheme(
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+          ),
+          elevation: 10,
+          color: Colors.white,
+          surfaceTintColor: Colors.white,
+          shadowColor: Colors.black.withOpacity(0.3),
+        ),
         useMaterial3: true,
+        visualDensity: VisualDensity.comfortable,
       ),
       themeMode: ThemeMode.light,
       routeInformationParser: BeamerParser(),
