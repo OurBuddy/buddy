@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:buddy/components/imagePost.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class FeedScreen extends StatefulHookConsumerWidget {
-  const FeedScreen({super.key});
+class ProfileScreen extends StatefulHookConsumerWidget {
+  const ProfileScreen({super.key});
 
   @override
-  ConsumerState<FeedScreen> createState() => _FeedScreenState();
+  ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _FeedScreenState extends ConsumerState<FeedScreen> {
+class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   final List<Map<String, dynamic>> _posts = [
     {
       'type': 'image',

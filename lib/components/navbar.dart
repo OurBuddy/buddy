@@ -17,12 +17,14 @@ class BottomNav extends StatefulHookConsumerWidget {
 }
 
 class _BottomNavState extends ConsumerState<BottomNav> {
+  listenFunc() {
+    if (mounted) setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
-    Beamer.of(context).addListener(() {
-      setState(() {});
-    });
-
+    Beamer.of(context).removeListener(listenFunc);
+    Beamer.of(context).addListener(listenFunc);
     final loc =
         Beamer.of(context).currentBeamLocation.state.routeInformation.uri;
     return BottomBar(
@@ -31,10 +33,18 @@ class _BottomNavState extends ConsumerState<BottomNav> {
       borderRadius: const BorderRadius.all(Radius.circular(9999)),
       width: 355,
       body: widget.body,
+      icon: (width, height) {
+        return const CircleAvatar(
+          backgroundColor: Colors.black,
+          child: Icon(
+            Icons.keyboard_arrow_up_rounded,
+            size: 30,
+            color: Colors.white,
+          ),
+        );
+      },
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.9),
-          backgroundBlendMode: BlendMode.lighten,
           borderRadius: const BorderRadius.all(Radius.circular(9999)),
           boxShadow: [
             BoxShadow(
@@ -44,20 +54,23 @@ class _BottomNavState extends ConsumerState<BottomNav> {
             ),
           ],
         ),
-        child: ClipRRect(
-          borderRadius: const BorderRadius.all(Radius.circular(9999)),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-            child: Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        child: Hero(
+          tag: "bottom-nav",
+          child: ClipRRect(
+            borderRadius: const BorderRadius.all(Radius.circular(9999)),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+              child: Container(
+                padding: const EdgeInsets.all(4.0),
+                color: Colors.white.withOpacity(0.8),
                 child: SizedBox(
                   width: double.infinity,
                   child: Row(
                     children: [
                       TextButton.icon(
-                        onPressed: () {},
+                        onPressed: () {
+                          Beamer.of(context).beamToNamed("/feed");
+                        },
                         icon: Image.asset(
                           loc.path.startsWith("/feed")
                               ? "assets/icons/home-color.png"
@@ -82,7 +95,9 @@ class _BottomNavState extends ConsumerState<BottomNav> {
                       ),
                       const SizedBox(width: 4),
                       TextButton.icon(
-                        onPressed: () {},
+                        onPressed: () {
+                          Beamer.of(context).beamToNamed("/chat");
+                        },
                         icon: Image.asset(
                           loc.path.startsWith("/chat")
                               ? "assets/icons/chat-color.png"

@@ -37,6 +37,17 @@ class AppBarBuddy extends StatelessWidget implements PreferredSizeWidget {
                 margin: const EdgeInsets.all(4),
                 padding: const EdgeInsets.all(4.0),
                 child: SvgPicture.asset(
+                  "assets/icons/rectangle-history-circle-plus-duotone.svg",
+                  width: 26,
+                ),
+              ),
+            ),
+            IconButton(
+              onPressed: () {},
+              icon: Container(
+                margin: const EdgeInsets.all(4),
+                padding: const EdgeInsets.all(4.0),
+                child: SvgPicture.asset(
                   "assets/icons/search.svg",
                   width: 24,
                 ),

@@ -1,5 +1,7 @@
 import 'package:beamer/beamer.dart';
+import 'package:buddy/screens/home/chats.dart';
 import 'package:buddy/screens/home/feed.dart';
+import 'package:buddy/screens/home/profile.dart';
 import 'package:buddy/screens/welcome/login.dart';
 import 'package:buddy/screens/welcome/magicLink.dart';
 import 'package:buddy/screens/welcome/register/create.dart';
@@ -9,6 +11,7 @@ import 'package:buddy/screens/welcome/register/step3.dart';
 import 'package:buddy/screens/welcome/register/step4.dart';
 import 'package:buddy/screens/welcome/register/step5.dart';
 import 'package:buddy/screens/welcome/welcome.dart';
+import 'package:buddy/states/providers.dart';
 import 'package:buddy/states/user.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -25,6 +28,7 @@ void main() async {
         "InNtaHhxYnV4a3hvbmZybG9qY2liIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTUwNTg2N"
         "TcsImV4cCI6MjAzMDYzNDY1N30.iXlpyyq3UB9GAiDZeltOjvsU-vqmlcrVkzAUJutm54k",
   );
+  
 
   await Hive.initFlutter();
   await Hive.openBox(UserProvider.boxName);
@@ -133,36 +137,46 @@ class _BuddyState extends ConsumerState<Buddy> {
 
   BeamerDelegate router(BuildContext context, WidgetRef ref) {
     return BeamerDelegate(
-        initialPath: '/feed',
-        locationBuilder: RoutesLocationBuilder(
-          routes: {
-            // Return either Widgets or BeamPages if more customization is needed
-            '/welcome': (context, state, data) => const WelcomeScreen(),
-            '/welcome/login': (context, state, data) => const LoginScreen(),
-            '/welcome/magicLink': (context, state, data) =>
-                const MagicLinkScreen(),
-            '/welcome/register': (context, state, data) => const SignUpStep1(),
-            '/welcome/register/step2': (context, state, data) =>
-                const SignUpStep2(),
-            '/welcome/register/step3': (context, state, data) =>
-                const SignUpStep3(),
-            '/welcome/register/step4': (context, state, data) =>
-                const SignUpStep4(),
-            '/welcome/register/step5': (context, state, data) =>
-                const SignUpStep5(),
-            '/welcome/register/create': (context, state, data) =>
-                const CreateScreen(),
+      initialPath: '/',
+      locationBuilder: RoutesLocationBuilder(
+        routes: {
+          // Return either Widgets or BeamPages if more customization is needed
+          '/welcome': (context, state, data) => const WelcomeScreen(),
+          '/welcome/login': (context, state, data) => const LoginScreen(),
+          '/welcome/magicLink': (context, state, data) =>
+              const MagicLinkScreen(),
+          '/welcome/register': (context, state, data) => const SignUpStep1(),
+          '/welcome/register/step2': (context, state, data) =>
+              const SignUpStep2(),
+          '/welcome/register/step3': (context, state, data) =>
+              const SignUpStep3(),
+          '/welcome/register/step4': (context, state, data) =>
+              const SignUpStep4(),
+          '/welcome/register/step5': (context, state, data) =>
+              const SignUpStep5(),
+          '/welcome/register/create': (context, state, data) =>
+              const CreateScreen(),
 
-            '/feed': (p0, p1, p2) => FeedScreen(),
-          },
-        ).call,
-        guards: [
-          // BeamGuard(
-          //   pathPatterns: ['/welcome', '/welcome/*'],
-          //   guardNonMatching: true,
-          //   check: (context, location) => ref.read(authProvider).isSignedIn,
-          //   beamToNamed: (origin, target) => '/welcome',
-          // ),
-        ]);
+          '/feed': (context, state, data) => const FeedScreen(),
+          '/chat': (context, state, data) => const ChatsScreen(),
+          '/profile': (context, state, data) => const ProfileScreen(),
+
+          // Redirect / to /feed
+        },
+      ).call,
+      guards: [
+        BeamGuard(
+          pathPatterns: ['/welcome', '/welcome/*'],
+          guardNonMatching: true,
+          check: (context, location) => ref.watch(authProvider).isSignedIn,
+          beamToNamed: (origin, target) => '/welcome',
+        ),
+        BeamGuard(
+          pathPatterns: ['/'],
+          check: (context, location) => false,
+          beamToNamed: (origin, target) => '/feed',
+        ),
+      ],
+    );
   }
 }

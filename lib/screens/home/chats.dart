@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:buddy/components/imagePost.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class FeedScreen extends StatefulHookConsumerWidget {
-  const FeedScreen({super.key});
+class ChatsScreen extends StatefulHookConsumerWidget {
+  const ChatsScreen({super.key});
 
   @override
-  ConsumerState<FeedScreen> createState() => _FeedScreenState();
+  ConsumerState<ChatsScreen> createState() => _ChatsScreenState();
 }
 
-class _FeedScreenState extends ConsumerState<FeedScreen> {
+class _ChatsScreenState extends ConsumerState<ChatsScreen> {
   final List<Map<String, dynamic>> _posts = [
     {
       'type': 'image',
@@ -87,7 +87,6 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
       body: BottomNav(body: (context, scroll) {
         return ListView.builder(
           itemCount: _posts.length,
-          controller: scroll,
           itemBuilder: (context, index) {
             final post = _posts[index];
             if (post['type'] == 'image') {
@@ -117,7 +116,7 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
           },
         );
       }),
-      backgroundColor: Color(0xFFE7E6E6),
+      backgroundColor: const Color(0xFFE7E6E6),
     );
   }
 }
