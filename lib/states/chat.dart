@@ -1,5 +1,8 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' as sb;
+
+import 'providers.dart';
 
 class ChatState {
   final StreamChatClient client;
@@ -19,7 +22,9 @@ class ChatState {
 }
 
 class ChatProvider extends StateNotifier<ChatState> {
-  ChatProvider(ref)
+  final sb.SupabaseClient _client = sb.Supabase.instance.client;
+
+  ChatProvider(this.ref)
       : super(ChatState(
           client: StreamChatClient('b67pax5b2wdq'),
           userId: '',
@@ -29,13 +34,37 @@ class ChatProvider extends StateNotifier<ChatState> {
         )) {
     // Ftech the user's data from the database
     // and update the state
+    loginUser();
   }
 
   final Ref ref;
 
-  void loginUser() {
+  void loginUser() async {
     // Login the user
 
     // 1. Authenticate using Supabase to get token
+    final res = await _client.functions.invoke("getchat");
+
+    // 2. Connect to Stream Chat
+    final client = state.client;
+    await client.connectUser(
+      User(id: ref.read(userProvider).profile!.id, extraData: {
+        'name': ref.read(userProvider).profile!.username,
+        'image': _client.storage.from('profile-pics').createSignedUrl(
+              ref.read(userProvider).profile!.imageUrl!,
+              const Duration(days: 1).inSeconds,
+            ),
+      }),
+      res.data['token'],
+    );
+
+    // 3. Update the state
+    state = ChatState(
+      client: client,
+      userId: res.data['chat']['id'],
+      userToken: res.data['token'],
+      userImageUrl: res.data['chat']['image_url'],
+      username: res.data['chat']['name'],
+    );
   }
 }

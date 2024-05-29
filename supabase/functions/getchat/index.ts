@@ -1,29 +1,66 @@
-// Follow this setup guide to integrate the Deno language server with your editor:
-// https://deno.land/manual/getting_started/setup_your_environment
-// This enables autocomplete, go to definition, etc.
+import { StreamChat } from "npm:stream-chat";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.7.1";
 
-console.log("Hello from Functions!")
+const corsHeaders = {
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type",
+};
 
-Deno.serve(async (req) => {
-  const { name } = await req.json()
-  const data = {
-    message: `Hello ${name}!`,
+const serverClient = StreamChat.getInstance(
+  Deno.env.get("STREAM_API_KEY")!,
+  Deno.env.get("STREAM_API_SECRET"),
+);
+
+Deno.serve(async (req: Request) => {
+  // This is needed if you're planning to invoke your function from a browser.
+  if (req.method === "OPTIONS") {
+    return new Response("ok", { headers: corsHeaders });
   }
 
-  return new Response(
-    JSON.stringify(data),
-    { headers: { "Content-Type": "application/json" } },
-  )
-})
+  try {
+    // Create a Supabase client with the Auth context of the logged in user.
+    const supabaseClient = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_ANON_KEY") ?? "",
+      {
+        global: {
+          headers: { Authorization: req.headers.get("Authorization")! },
+        },
+      },
+    );
 
-/* To invoke locally:
+    const { data } = await supabaseClient.auth.getUser();
+    const userId = data!.user!.id;
 
-  1. Run `supabase start` (see: https://supabase.com/docs/reference/cli/supabase-start)
-  2. Make an HTTP request:
+    // Valid user ID check
+    if (!userId) {
+      throw new Error("User not found");
+    }
 
-  curl -i --location --request POST 'http://127.0.0.1:54321/functions/v1/getchat' \
-    --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0' \
-    --header 'Content-Type: application/json' \
-    --data '{"name":"Functions"}'
+    // Create a token using the userId
+    try {
+      const token = serverClient.createToken(userId);
+      console.log("token:", token);
 
-*/
+      // Respond with the created token
+      return new Response(JSON.stringify({ token: token }), {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    } catch (error) {
+      return new Response(JSON.stringify({ error1: error.message }), {
+        status: 500,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    }
+  } catch (error) {
+    return new Response(JSON.stringify({ error: error.message }), {
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      status: 400,
+    });
+  }
+});

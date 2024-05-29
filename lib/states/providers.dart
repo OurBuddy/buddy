@@ -1,4 +1,5 @@
 import 'package:buddy/states/auth.dart';
+import 'package:buddy/states/chat.dart';
 import 'package:buddy/states/signup.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -14,4 +15,8 @@ final userProvider = StateNotifierProvider<UserProvider, UserState>(
 
 final signupProvider = StateNotifierProvider<SignupProvider, SignupState>(
   (ref) => SignupProvider(ref),
+);
+
+final chatProvider = StateNotifierProvider<ChatProvider, ChatState>(
+  (ref) => ChatProvider(ref),
 );

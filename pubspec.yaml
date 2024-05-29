@@ -50,12 +50,13 @@ dependencies:
   # Flutter Router
   beamer: ^1.6.1
   image_picker: ^1.1.1
-  image_cropper: ^6.0.0
+  image_cropper: ^5.0.0
   flutter_image_compress: ^2.2.0
   image_compression_flutter: ^1.0.4
   flutter_svg: ^2.0.10+1
   flutter_floating_bottom_bar: ^1.2.0
   stream_chat_flutter: ^7.2.0
+  connectivity_plus: '5.0.2'
 
 dev_dependencies:
   flutter_test:
