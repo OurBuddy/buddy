@@ -2,6 +2,7 @@ import 'package:buddy/components/appbar.dart';
 import 'package:buddy/components/navbar.dart';
 import 'package:buddy/components/profileHeader.dart';
 import 'package:buddy/components/textPost.dart';
+import 'package:buddy/data/profile.dart';
 import 'package:buddy/states/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:buddy/components/imagePost.dart';
@@ -16,21 +17,36 @@ class ProfileScreen extends StatefulHookConsumerWidget {
 }
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
+  Future<Profile?>? profile;
+
+  @override
+  void initState() {
+    Future.delayed(Duration.zero, () {
+      profile = ref.read(userProvider.notifier).fetchProfileNoUpdate();
+      setState(() {});
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const AppBarBuddy(),
       body: BottomNav(body: (context, scroll) {
-        return ListView(
-          controller: scroll,
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                ProfileHeader(),
-              ],
-            ),
-          ],
-        );
+        return FutureBuilder(
+            future: profile,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState != ConnectionState.done) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              print('ProfileScreen: ${snapshot.data}');
+              return ListView(
+                controller: scroll,
+                children: <Widget>[
+                  ProfileHeader(profile: snapshot.data),
+                ],
+              );
+            });
       }),
       backgroundColor: Color(0xFFE7E6E6),
     );

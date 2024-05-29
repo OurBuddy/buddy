@@ -56,7 +56,12 @@ class AuthProvider extends StateNotifier<AuthState> {
       } else if (event.event == sb.AuthChangeEvent.userDeleted) {
         setInitial();
       } else if (event.event == sb.AuthChangeEvent.initialSession) {
-        setInitial();
+        // Check if the user is already signed in
+        if (state.isSignedIn) {
+          setAuthenticated(state.session!);
+        } else {
+          setInitial();
+        }
       }
     });
 

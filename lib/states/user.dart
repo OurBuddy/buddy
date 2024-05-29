@@ -231,6 +231,29 @@ class UserProvider extends StateNotifier<UserState> {
     }
   }
 
+  Future<Profile?> fetchProfileNoUpdate({String? id}) async {
+    setLoading(true);
+    final loggedInId = ref.read(authProvider).session?.user.id;
+    Profile? profile;
+
+    if (id == null) {
+      if (loggedInId == null) {
+        setLoading(false);
+        throw "No session or ID found";
+      }
+      id = loggedInId;
+    }
+
+    if (loggedInId == id) {
+      profile = state.profile;
+    } else {
+      profile = await getProfile(id: id);
+    }
+
+    setLoading(false);
+    return profile;
+  }
+
   Future<Profile?> getProfile({String? id}) async {
     setLoading(true);
     final loggedInId = ref.read(authProvider).session?.user.id;
