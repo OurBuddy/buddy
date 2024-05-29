@@ -122,7 +122,9 @@ class _BottomNavState extends ConsumerState<BottomNav> {
                       ),
                       const SizedBox(width: 4),
                       TextButton.icon(
-                        onPressed: () {},
+                        onPressed: () {
+                          Beamer.of(context).beamToNamed("/profile");
+                        },
                         icon: Image.asset(
                           loc.path.startsWith("/profile")
                               ? "assets/icons/paw-color.png"
