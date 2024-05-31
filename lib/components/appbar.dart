@@ -32,7 +32,45 @@ class AppBarBuddy extends StatelessWidget implements PreferredSizeWidget {
       actions: actions ??
           [
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                // Open bottom sheet
+
+                showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return Container(
+                        height: 140,
+                        color: Colors.white,
+                        child: Column(
+                          children: [
+                            // Text or image post
+                            ListTile(
+                              leading: Image.asset(
+                                "assets/icons/camera-front-color.png",
+                              ),
+                              title: const Text("Image Post"),
+                              onTap: () {
+                                // Select image or take a picture
+
+                                Navigator.pop(context);
+                              },
+                            ),
+
+                            // Text post
+                            ListTile(
+                              leading: Image.asset(
+                                "assets/icons/notify-heart-front-color.png",
+                              ),
+                              title: const Text("Text Post"),
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    });
+              },
               icon: Container(
                 margin: const EdgeInsets.all(4),
                 padding: const EdgeInsets.all(4.0),

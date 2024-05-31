@@ -20,6 +20,9 @@ class _ProfileHeaderState extends ConsumerState<ProfileHeader> {
 
     final profile = ref.read(userProvider.notifier).getProfileStats();
 
+    final isOwnProfile =
+        ref.read(userProvider).profile!.id == widget.profile!.id;
+
     return SizedBox(
       width: double.infinity,
       child: Padding(
@@ -206,10 +209,11 @@ class _ProfileHeaderState extends ConsumerState<ProfileHeader> {
                     style: Theme.of(context).textTheme.bodyMedium),
               ),
             ),
-            Button(
-              onPressed: () {},
-              child: Text("Become Buddies"),
-            )
+            if (!isOwnProfile)
+              Button(
+                onPressed: () {},
+                child: Text("Become Buddies"),
+              )
           ],
         ),
       ),

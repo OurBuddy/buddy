@@ -494,7 +494,7 @@ class UserProvider extends StateNotifier<UserState> {
     await updateProfile(state.profile!.copyWith(
         imageUrl: Supabase.instance.client.storage
             .from("profile-pics")
-            .getPublicUrl("${state.profile!.id}/profile.png")));
+            .getPublicUrl("${state.profile!.id}/profile.jpg")));
   }
 
   void logout() {

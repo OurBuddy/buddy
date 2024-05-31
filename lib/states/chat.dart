@@ -50,9 +50,8 @@ class ChatProvider extends StateNotifier<ChatState> {
     await client.connectUser(
       User(id: ref.read(userProvider).profile!.id, extraData: {
         'name': ref.read(userProvider).profile!.username,
-        'image': _client.storage.from('profile-pics').createSignedUrl(
+        'image': _client.storage.from('profile-pics').getPublicUrl(
               ref.read(userProvider).profile!.imageUrl!,
-              const Duration(days: 1).inSeconds,
             ),
       }),
       res.data['token'],
