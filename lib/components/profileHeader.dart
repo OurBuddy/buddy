@@ -1,3 +1,4 @@
+import 'package:buddy/components/buttons.dart';
 import 'package:buddy/data/profile.dart';
 import 'package:buddy/states/providers.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,8 @@ class _ProfileHeaderState extends ConsumerState<ProfileHeader> {
   Widget build(BuildContext context) {
     print(widget.profile!.imageUrl!);
 
+    final profile = ref.read(userProvider.notifier).getProfileStats();
+
     return SizedBox(
       width: double.infinity,
       child: Padding(
@@ -28,8 +31,11 @@ class _ProfileHeaderState extends ConsumerState<ProfileHeader> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CircleAvatar(
-                    radius: 70,
-                    backgroundImage: widget.profile!.imageUrl == null
+                    radius: 55,
+                    backgroundImage: widget.profile?.hasPet ?? false
+                        ? const AssetImage('assets/dog-sitting.png')
+                        : const AssetImage('assets/person.png'),
+                    foregroundImage: widget.profile!.imageUrl == null
                         ? widget.profile?.hasPet ?? false
                             ? const AssetImage('assets/dog-sitting.png')
                             : const AssetImage('assets/person.png')
@@ -51,46 +57,135 @@ class _ProfileHeaderState extends ConsumerState<ProfileHeader> {
                                   .headlineSmall
                                   ?.copyWith(
                                     fontSize: 24,
+                                    color: Colors.black,
                                   )),
-                          const SizedBox(height: 2),
-                          Row(
-                            children: [
-                              Text(
-                                widget.profile!.personName,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.copyWith(color: Colors.grey.shade700),
-                              ),
-                              Text(
-                                widget.profile!.hasPet ?? false
-                                    ? ' and ${widget.profile!.petName}'
-                                    : '',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.copyWith(color: Colors.grey.shade700),
-                              ),
-                              Expanded(
-                                  child: Text(
-                                "Stanford, CA",
-                                textAlign: TextAlign.end,
-                              )),
-                            ],
+                          Padding(
+                            padding: const EdgeInsets.all(2),
+                            child: Row(
+                              children: [
+                                Text(
+                                  widget.profile!.personName,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(color: Colors.grey.shade700),
+                                ),
+                                Text(
+                                  widget.profile!.hasPet ?? false
+                                      ? ' and ${widget.profile!.petName}'
+                                      : '',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(color: Colors.grey.shade700),
+                                ),
+                                Expanded(
+                                    child: Text(
+                                  "Stanford, CA",
+                                  textAlign: TextAlign.end,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(color: Colors.grey.shade700),
+                                )),
+                              ],
+                            ),
                           ),
                           const SizedBox(height: 8),
-                          Row(
-                            children: [
-                              const Icon(Icons.location_on),
-                              const SizedBox(width: 8),
-                              Text(
-                                widget.profile!.username,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ],
-                          ),
+                          FutureBuilder(
+                              future: profile,
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState !=
+                                    ConnectionState.done) {
+                                  return const Center(
+                                      child: CircularProgressIndicator());
+                                }
+                                return Row(
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        children: <Widget>[
+                                          Text(
+                                            snapshot.data['buddies'].toString(),
+                                            textAlign: TextAlign.center,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyLarge
+                                                ?.copyWith(
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                          ),
+                                          Text(
+                                            'buddies',
+                                            textAlign: TextAlign.center,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(
+                                                    color:
+                                                        Colors.grey.shade700),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Column(
+                                        children: <Widget>[
+                                          Text(
+                                            snapshot.data['pics'].toString(),
+                                            textAlign: TextAlign.center,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyLarge
+                                                ?.copyWith(
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                          ),
+                                          Text(
+                                            'pics',
+                                            textAlign: TextAlign.center,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(
+                                                    color:
+                                                        Colors.grey.shade700),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Column(
+                                        children: <Widget>[
+                                          Text(
+                                            snapshot.data['posts'].toString(),
+                                            textAlign: TextAlign.center,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyLarge
+                                                ?.copyWith(
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                          ),
+                                          Text(
+                                            'posts',
+                                            textAlign: TextAlign.center,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(
+                                                    color:
+                                                        Colors.grey.shade700),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              }),
                         ],
                       ),
                     ),
@@ -98,6 +193,23 @@ class _ProfileHeaderState extends ConsumerState<ProfileHeader> {
                 ],
               ),
             ),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+              child: SizedBox(
+                width: double.infinity,
+                child: Text(
+                    widget.profile?.bio ??
+                        'hewo! I still need to write a bio but just look at me,'
+                            ' how could you be mad at meeeeee?',
+                    textAlign: TextAlign.left,
+                    style: Theme.of(context).textTheme.bodyMedium),
+              ),
+            ),
+            Button(
+              onPressed: () {},
+              child: Text("Become Buddies"),
+            )
           ],
         ),
       ),

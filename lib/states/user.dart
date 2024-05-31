@@ -254,6 +254,26 @@ class UserProvider extends StateNotifier<UserState> {
     return profile;
   }
 
+  Future getProfileStats({String? id}) async {
+    final loggedInId = ref.read(authProvider).session?.user.id;
+
+    if (id == null) {
+      if (loggedInId == null) {
+        setLoading(false);
+        throw "No session or ID found";
+      }
+      id = loggedInId;
+    }
+
+    // Get the profile stats
+    final res = await Supabase.instance.client.functions
+        .invoke("getProfileDetails", body: {"reqUserId": id});
+
+    print(res.data);
+
+    return res.data;
+  }
+
   Future<Profile?> getProfile({String? id}) async {
     setLoading(true);
     final loggedInId = ref.read(authProvider).session?.user.id;

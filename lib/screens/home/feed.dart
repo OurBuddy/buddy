@@ -1,6 +1,7 @@
 import 'package:buddy/components/appbar.dart';
 import 'package:buddy/components/navbar.dart';
 import 'package:buddy/components/textPost.dart';
+import 'package:buddy/data/profile.dart';
 import 'package:buddy/states/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:buddy/components/imagePost.dart';

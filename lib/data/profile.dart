@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class Profile {
   final String id;
@@ -63,7 +62,7 @@ class Profile {
       'bio': bio,
       'private': private?.toMap(),
       'userDetails': userDetails?.toMap(),
-      'imageUrl': imageUrl,
+      'profilePic': imageUrl,
     };
   }
 
@@ -92,7 +91,7 @@ class Profile {
       userDetails: map['userDetails'] != null
           ? UserDetails.fromMap(Map<String, dynamic>.from(map['userDetails']))
           : null,
-      imageUrl: map['profilePic'] ?? '',
+      imageUrl: map['profilePic'] ?? map['imageUrl'] ?? '',
     );
   }
 
