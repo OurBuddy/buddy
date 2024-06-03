@@ -1,6 +1,5 @@
 import 'package:beamer/beamer.dart';
 import 'package:buddy/components/buttons.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class WelcomeScreen extends StatelessWidget {

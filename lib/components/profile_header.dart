@@ -16,8 +16,6 @@ class ProfileHeader extends StatefulHookConsumerWidget {
 class _ProfileHeaderState extends ConsumerState<ProfileHeader> {
   @override
   Widget build(BuildContext context) {
-    print(widget.profile!.imageUrl!);
-
     final profile = ref.read(userProvider.notifier).getProfileStats();
 
     final isOwnProfile =

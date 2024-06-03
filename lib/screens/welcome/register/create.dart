@@ -123,8 +123,8 @@ class _CreateScreenState extends ConsumerState<CreateScreen> {
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 26),
-                      LoadingSpinner(
-                        padding: const EdgeInsets.all(16),
+                      const LoadingSpinner(
+                        padding: EdgeInsets.all(16),
                       )
                     ],
                   );

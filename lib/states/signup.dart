@@ -205,8 +205,6 @@ class SignupProvider extends StateNotifier<SignupState> {
     final response =
         await _client.from('profile').count().eq('username', username);
 
-    print("response: $response, username: $username");
-
     return response == 0;
   }
 

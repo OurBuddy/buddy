@@ -34,8 +34,8 @@ class _ChatsScreenState extends ConsumerState<ChatsScreen> {
 
 class ChannelListPage extends StatefulWidget {
   const ChannelListPage({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<ChannelListPage> createState() => _ChannelListPageState();

@@ -1,5 +1,6 @@
 import 'package:buddy/states/auth.dart';
 import 'package:buddy/states/chat.dart';
+import 'package:buddy/states/post.dart';
 import 'package:buddy/states/signup.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -19,4 +20,8 @@ final signupProvider = StateNotifierProvider<SignupProvider, SignupState>(
 
 final chatProvider = StateNotifierProvider<ChatProvider, ChatState>(
   (ref) => ChatProvider(ref),
+);
+
+final postProvider = StateNotifierProvider<PostProvider, PostState>(
+  (ref) => PostProvider(ref),
 );

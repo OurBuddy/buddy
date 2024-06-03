@@ -1,13 +1,10 @@
 import 'package:buddy/components/appbar.dart';
 import 'package:buddy/components/navbar.dart';
-import 'package:buddy/components/profileHeader.dart';
-import 'package:buddy/components/textPost.dart';
+import 'package:buddy/components/profile_header.dart';
 import 'package:buddy/data/profile.dart';
 import 'package:buddy/states/providers.dart';
 import 'package:flutter/material.dart';
-import 'package:buddy/components/imagePost.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ProfileScreen extends StatefulHookConsumerWidget {
   const ProfileScreen({super.key});
@@ -39,7 +36,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               if (snapshot.connectionState != ConnectionState.done) {
                 return const Center(child: CircularProgressIndicator());
               }
-              print('ProfileScreen: ${snapshot.data}');
               return ListView(
                 controller: scroll,
                 children: <Widget>[
@@ -48,7 +44,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               );
             });
       }),
-      backgroundColor: Color(0xFFE7E6E6),
+      backgroundColor: const Color(0xFFE7E6E6),
     );
   }
 }

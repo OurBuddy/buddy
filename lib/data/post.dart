@@ -4,60 +4,63 @@ import 'package:flutter/foundation.dart';
 
 class Post {
   final String id;
-  final DateTime date;
+  final DateTime createdAt;
   final String createdBy;
-  final String postImageUrl;
-  final String caption;
-  final List<String> likes;
+  final String? postImageUrl;
+  final String? caption;
+  final List<String> likedBy;
 
-  get likeCount => likes.length;
+  get likeCount => likedBy.length;
 
   Post({
     required this.id,
-    required this.date,
+    required this.createdAt,
     required this.createdBy,
-    required this.postImageUrl,
-    required this.caption,
-    required this.likes,
-  });
+    this.postImageUrl,
+    this.caption,
+    this.likedBy = const [],
+  }) {
+    assert(postImageUrl != null || caption != null,
+        'Post must have either an image or a caption');
+  }
 
   Post copyWith({
     String? id,
-    DateTime? date,
+    DateTime? createdAt,
     String? createdBy,
-    String? postImageUrl,
-    String? caption,
-    List<String>? likes,
+    ValueGetter<String?>? postImageUrl,
+    ValueGetter<String?>? caption,
+    List<String>? likedBy,
   }) {
     return Post(
       id: id ?? this.id,
-      date: date ?? this.date,
+      createdAt: createdAt ?? this.createdAt,
       createdBy: createdBy ?? this.createdBy,
-      postImageUrl: postImageUrl ?? this.postImageUrl,
-      caption: caption ?? this.caption,
-      likes: likes ?? this.likes,
+      postImageUrl: postImageUrl != null ? postImageUrl() : this.postImageUrl,
+      caption: caption != null ? caption() : this.caption,
+      likedBy: likedBy ?? this.likedBy,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'date': date.millisecondsSinceEpoch,
+      'createdAt': createdAt.toIso8601String(),
       'createdBy': createdBy,
       'postImageUrl': postImageUrl,
       'caption': caption,
-      'likes': likes,
+      'likedBy': likedBy,
     };
   }
 
   factory Post.fromMap(Map<String, dynamic> map) {
     return Post(
       id: map['id'] ?? '',
-      date: DateTime.fromMillisecondsSinceEpoch(map['date']),
+      createdAt: DateTime.parse(map['createdAt']),
       createdBy: map['createdBy'] ?? '',
-      postImageUrl: map['postImageUrl'] ?? '',
-      caption: map['caption'] ?? '',
-      likes: List<String>.from(map['likes']),
+      postImageUrl: map['postImageUrl'],
+      caption: map['caption'],
+      likedBy: List<String>.from(map['likedBy']),
     );
   }
 
@@ -67,7 +70,7 @@ class Post {
 
   @override
   String toString() {
-    return 'Post(id: $id, date: $date, createdBy: $createdBy, postImageUrl: $postImageUrl, caption: $caption, likes: $likes)';
+    return 'Post(id: $id, createdAt: $createdAt, createdBy: $createdBy, postImageUrl: $postImageUrl, caption: $caption, likedBy: $likedBy)';
   }
 
   @override
@@ -76,20 +79,20 @@ class Post {
 
     return other is Post &&
         other.id == id &&
-        other.date == date &&
+        other.createdAt == createdAt &&
         other.createdBy == createdBy &&
         other.postImageUrl == postImageUrl &&
         other.caption == caption &&
-        listEquals(other.likes, likes);
+        listEquals(other.likedBy, likedBy);
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
-        date.hashCode ^
+        createdAt.hashCode ^
         createdBy.hashCode ^
         postImageUrl.hashCode ^
         caption.hashCode ^
-        likes.hashCode;
+        likedBy.hashCode;
   }
 }

@@ -1,7 +1,6 @@
-import 'package:buddy/components/newPost.dart';
-import 'package:buddy/components/textPoster.dart';
+import 'package:buddy/components/new_post.dart';
+import 'package:buddy/components/text_poster.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 
 class AppBarBuddy extends StatelessWidget implements PreferredSizeWidget {

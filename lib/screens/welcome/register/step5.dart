@@ -107,6 +107,7 @@ class _CreateState extends ConsumerState<SignUpStep5> {
                                         }
 
                                         if (mounted) {
+                                          // ignore: use_build_context_synchronously
                                           Navigator.of(context).pop();
                                         }
                                       } catch (e) {
@@ -145,6 +146,7 @@ class _CreateState extends ConsumerState<SignUpStep5> {
                                         signupNotif.setProfilePic(pickedFile);
                                       }
 
+                                      // ignore: use_build_context_synchronously
                                       if (mounted) Navigator.of(context).pop();
                                     },
                                   ),

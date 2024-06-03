@@ -1,10 +1,8 @@
 import 'package:buddy/components/appbar.dart';
 import 'package:buddy/components/navbar.dart';
-import 'package:buddy/components/textPost.dart';
-import 'package:buddy/data/profile.dart';
-import 'package:buddy/states/providers.dart';
+import 'package:buddy/components/text_post.dart';
 import 'package:flutter/material.dart';
-import 'package:buddy/components/imagePost.dart';
+import 'package:buddy/components/image_post.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class FeedScreen extends StatefulHookConsumerWidget {
@@ -84,7 +82,6 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(ref.read(userProvider).profile);
     return Scaffold(
       appBar: const AppBarBuddy(),
       body: BottomNav(body: (context, scroll) {
@@ -120,7 +117,7 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
           },
         );
       }),
-      backgroundColor: Color(0xFFE7E6E6),
+      backgroundColor: const Color(0xFFE7E6E6),
     );
   }
 }

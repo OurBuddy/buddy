@@ -269,7 +269,6 @@ class UserProvider extends StateNotifier<UserState> {
     final res = await Supabase.instance.client.functions
         .invoke("getProfileDetails", body: {"reqUserId": id});
 
-    print(res.data);
 
     return res.data;
   }
@@ -478,9 +477,6 @@ class UserProvider extends StateNotifier<UserState> {
       config: config,
     ));
 
-    // Print size
-    print("Original size: ${image.lengthSync()}");
-    print("Compressed size: ${compImg.rawBytes.length}");
 
     await Supabase.instance.client.storage.from("profile-pics").uploadBinary(
           "${state.profile!.id}/profile.jpg",

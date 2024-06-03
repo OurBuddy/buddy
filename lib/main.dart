@@ -3,7 +3,7 @@ import 'package:buddy/screens/home/chats.dart';
 import 'package:buddy/screens/home/feed.dart';
 import 'package:buddy/screens/home/profile.dart';
 import 'package:buddy/screens/welcome/login.dart';
-import 'package:buddy/screens/welcome/magicLink.dart';
+import 'package:buddy/screens/welcome/magic_link.dart';
 import 'package:buddy/screens/welcome/register/create.dart';
 import 'package:buddy/screens/welcome/register/step1.dart';
 import 'package:buddy/screens/welcome/register/step2.dart';
@@ -28,7 +28,6 @@ void main() async {
         "InNtaHhxYnV4a3hvbmZybG9qY2liIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTUwNTg2N"
         "TcsImV4cCI6MjAzMDYzNDY1N30.iXlpyyq3UB9GAiDZeltOjvsU-vqmlcrVkzAUJutm54k",
   );
-  
 
   await Hive.initFlutter();
   await Hive.openBox(UserProvider.boxName);
@@ -45,7 +44,7 @@ class Buddy extends StatefulHookConsumerWidget {
 }
 
 class _BuddyState extends ConsumerState<Buddy> {
-  late final delegate;
+  late final BeamerDelegate delegate;
 
   @override
   void initState() {
