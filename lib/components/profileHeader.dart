@@ -74,7 +74,7 @@ class _ProfileHeaderState extends ConsumerState<ProfileHeader> {
                                       ?.copyWith(color: Colors.grey.shade700),
                                 ),
                                 Text(
-                                  widget.profile!.hasPet ?? false
+                                  widget.profile!.hasPet
                                       ? ' and ${widget.profile!.petName}'
                                       : '',
                                   style: Theme.of(context)
@@ -211,8 +211,10 @@ class _ProfileHeaderState extends ConsumerState<ProfileHeader> {
             ),
             if (!isOwnProfile)
               Button(
-                onPressed: () {},
-                child: Text("Become Buddies"),
+                onPressed: () {
+                  //ref.read(userProvider.notifier).addBuddy(widget.profile!.id);
+                },
+                child: const Text("Become Buddies"),
               )
           ],
         ),

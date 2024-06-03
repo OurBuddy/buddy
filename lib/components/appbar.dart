@@ -1,4 +1,7 @@
+import 'package:buddy/components/newPost.dart';
+import 'package:buddy/components/textPoster.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 
 class AppBarBuddy extends StatelessWidget implements PreferredSizeWidget {
@@ -38,36 +41,28 @@ class AppBarBuddy extends StatelessWidget implements PreferredSizeWidget {
                 showModalBottomSheet(
                     context: context,
                     builder: (context) {
-                      return Container(
-                        height: 140,
-                        color: Colors.white,
-                        child: Column(
-                          children: [
-                            // Text or image post
-                            ListTile(
-                              leading: Image.asset(
-                                "assets/icons/camera-front-color.png",
-                              ),
-                              title: const Text("Image Post"),
-                              onTap: () {
-                                // Select image or take a picture
-
-                                Navigator.pop(context);
-                              },
-                            ),
-
-                            // Text post
-                            ListTile(
-                              leading: Image.asset(
-                                "assets/icons/notify-heart-front-color.png",
-                              ),
-                              title: const Text("Text Post"),
-                              onTap: () {
-                                Navigator.pop(context);
-                              },
-                            ),
-                          ],
-                        ),
+                      return NewPost(
+                        onPost: () {
+                          Navigator.pop(context);
+                          showModalBottomSheet(
+                            isScrollControlled: true,
+                            context: context,
+                            builder: (context) {
+                              return const TextPostDialog();
+                            },
+                          );
+                        },
+                        onImage: () {
+                          Navigator.pop(context);
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (context) {
+                              return const Center(
+                                child: Text("Image"),
+                              );
+                            },
+                          );
+                        },
                       );
                     });
               },
