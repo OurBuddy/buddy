@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:buddy/data/post.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
 
@@ -100,6 +101,30 @@ class PostProvider extends StateNotifier<PostState> {
     );
 
     await client.from("posts").insert(post.toMap());
+
+    return post.id;
+  }
+
+  Future<String> postImage(CroppedFile image, String caption) async {
+    // Upload image
+    final bytes = await image.readAsBytes();
+    final filename =
+        "${ref.read(userProvider).profile!.id}/${const Uuid().v4()}.jpg";
+
+    final post = Post(
+      id: const Uuid().v4(),
+      createdAt: DateTime.now(),
+      createdBy: ref.read(userProvider).profile!.id,
+      caption: caption,
+      postImageUrl: filename,
+    );
+
+    await client.from("posts").insert(post.toMap());
+
+    await client.storage.from("posts").uploadBinary(
+          filename,
+          bytes,
+        );
 
     return post.id;
   }

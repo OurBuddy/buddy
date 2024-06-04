@@ -125,6 +125,8 @@ class _TextPostDialogState extends ConsumerState<TextPostDialog> {
                   ),
                   const SizedBox(height: 8),
                   TonalButton(
+                    isLoading:
+                        future.connectionState == ConnectionState.waiting,
                     onPressed: () async {
                       post = ref
                           .read(postProvider.notifier)

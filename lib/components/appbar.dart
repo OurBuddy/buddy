@@ -1,3 +1,4 @@
+import 'package:buddy/components/image_poster.dart';
 import 'package:buddy/components/new_post.dart';
 import 'package:buddy/components/text_poster.dart';
 import 'package:flutter/material.dart';
@@ -54,11 +55,10 @@ class AppBarBuddy extends StatelessWidget implements PreferredSizeWidget {
                         onImage: () {
                           Navigator.pop(context);
                           showModalBottomSheet(
+                            isScrollControlled: true,
                             context: context,
                             builder: (context) {
-                              return const Center(
-                                child: Text("Image"),
-                              );
+                              return const ImagePostDialog();
                             },
                           );
                         },

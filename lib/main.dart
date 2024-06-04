@@ -159,6 +159,7 @@ class _BuddyState extends ConsumerState<Buddy> {
           '/feed': (context, state, data) => const FeedScreen(),
           '/chat': (context, state, data) => const ChatsScreen(),
           '/profile': (context, state, data) => const ProfileScreen(),
+          '/profile/:id': (context, state, data) => const ProfileScreen(),
 
           // Redirect / to /feed
         },

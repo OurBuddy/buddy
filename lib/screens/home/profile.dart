@@ -16,6 +16,8 @@ class ProfileScreen extends StatefulHookConsumerWidget {
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   Future<Profile?>? profile;
 
+  
+
   @override
   void initState() {
     Future.delayed(Duration.zero, () {
