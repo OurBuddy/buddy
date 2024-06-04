@@ -36,8 +36,6 @@ class ChatProvider extends StateNotifier<ChatState> {
     // 1. Authenticate using Supabase to get token
     final res = await _client.functions.invoke("getchat");
 
-    print(res.data["token"]);
-
     // 2. Connect to Stream Chat
     final user = await state.client.connectUser(
       User(id: ref.read(userProvider).profile!.id, extraData: {

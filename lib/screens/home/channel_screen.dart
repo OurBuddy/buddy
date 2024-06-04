@@ -24,7 +24,7 @@ class _ChannelScreenState extends ConsumerState<ChannelScreen> {
       client: chatState.client,
       child: StreamChannel(
         channel: widget.id,
-        child: Scaffold(
+        child: const Scaffold(
           appBar: StreamChannelHeader(),
           body: Column(
             children: <Widget>[

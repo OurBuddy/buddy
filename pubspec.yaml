@@ -59,6 +59,7 @@ dependencies:
   connectivity_plus: '5.0.2'
   uuid: ^4.4.0
   better_skeleton: ^0.1.0
+  timeago: ^3.6.1
 
 dev_dependencies:
   flutter_test:

@@ -269,8 +269,11 @@ class _BuddyButtonState extends ConsumerState<BuddyButton> {
                                 widget.widget.profile!.username,
                               );
 
-                      Beamer.of(context)
-                          .beamToNamed('/chat/${chat.cid}', data: chat);
+                      if (mounted) {
+                        // ignore: use_build_context_synchronously
+                        Beamer.of(context)
+                            .beamToNamed('/chat/${chat.cid}', data: chat);
+                      }
                     },
                     child: const Text('Message'),
                   ),

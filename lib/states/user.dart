@@ -518,6 +518,7 @@ class UserProvider extends StateNotifier<UserState> {
           .delete()
           .eq('requestId', loggedInId)
           .eq('targetId', id);
+      // ignore: empty_catches
     } catch (e) {}
 
     try {
@@ -526,6 +527,7 @@ class UserProvider extends StateNotifier<UserState> {
           .delete()
           .eq('requestId', id)
           .eq('targetId', loggedInId);
+      // ignore: empty_catches
     } catch (e) {}
   }
 
