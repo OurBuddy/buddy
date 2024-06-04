@@ -64,7 +64,10 @@ Deno.serve(async (req) => {
     throw postsError;
   }
 
-  const imageCount = postsData!.filter((post) => post.postImageURL).length;
+  const imageCount = postsData!.filter((post) =>
+    post.postImageUrl !== null
+  ).length;
+  console.log(imageCount);
   const textCount = postsData!.length - imageCount;
 
   // Wether the user is a buddy of the logged in user
