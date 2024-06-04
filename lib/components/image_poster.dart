@@ -32,12 +32,33 @@ class _ImagePostDialogState extends ConsumerState<ImagePostDialog> {
         child: FutureBuilder(
             future: post,
             builder: (context, future) {
-              if (future.connectionState == ConnectionState.done) {
+              if (future.connectionState == ConnectionState.done &&
+                  post != null &&
+                  !future.hasError) {
                 Future.delayed(const Duration(seconds: 2), () {
                   if (mounted) {
                     Navigator.pop(context);
                   }
                 });
+
+                if (future.hasError) {
+                  return Column(
+                    children: [
+                      const Text('Error posting'),
+                      Text(future.error.toString()),
+                      //Try again button
+                      TonalButton(
+                        onPressed: () {
+                          post = ref
+                              .read(postProvider.notifier)
+                              .postImage(image!, postController.text);
+                          setState(() {});
+                        },
+                        child: const Text('Try again'),
+                      ),
+                    ],
+                  );
+                }
                 return SizedBox(
                   width: double.infinity,
                   child: Column(

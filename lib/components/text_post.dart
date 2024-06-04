@@ -1,26 +1,13 @@
+import 'package:buddy/data/post.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart'; // Import flutter_svg
 
 class TextPost extends StatefulWidget {
-  final String username;
-  final String petowner;
-  final String userImageUrl;
-  final String caption;
-  final int likes;
-  final int comments;
-  final int sends;
-  final List<Map<String, String>> topcomments; // List of top comments
+  final Post post;
 
   const TextPost({
     super.key,
-    required this.username,
-    required this.petowner,
-    required this.userImageUrl,
-    required this.caption,
-    required this.likes,
-    required this.comments,
-    required this.sends,
-    required this.topcomments,
+    required this.post,
   });
 
   @override
@@ -28,12 +15,6 @@ class TextPost extends StatefulWidget {
 }
 
 class _TextPostState extends State<TextPost> {
-  String getUserName(Map<String, String> comment) {
-    return comment.entries
-        .firstWhere((entry) => entry.key.startsWith('user'))
-        .value;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -43,17 +24,18 @@ class _TextPostState extends State<TextPost> {
         children: <Widget>[
           ListTile(
             leading: CircleAvatar(
-              backgroundImage: AssetImage(widget.userImageUrl),
+              backgroundImage: const AssetImage("assets/dog-sitting.png"),
+              foregroundImage: NetworkImage(widget.post.userImageUrl ?? ""),
             ),
             title: RichText(
               text: TextSpan(
                 style: const TextStyle(fontSize: 16, color: Colors.black),
                 children: [
                   TextSpan(
-                      text: widget.username,
+                      text: widget.post.username,
                       style: const TextStyle(fontWeight: FontWeight.bold)),
                   TextSpan(
-                      text: '\n${widget.petowner}',
+                      text: '\n${widget.post.petowner}',
                       style: const TextStyle(
                           fontWeight: FontWeight.normal, fontSize: 14)),
                 ],
@@ -64,7 +46,7 @@ class _TextPostState extends State<TextPost> {
             padding:
                 const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: Text(
-              widget.caption,
+              widget.post.caption ?? "",
               style: const TextStyle(
                   fontSize: 18), // Set the caption font size to 18
             ),
@@ -77,17 +59,12 @@ class _TextPostState extends State<TextPost> {
                 SvgPicture.asset('assets/icons/Posts/filledHeart.svg',
                     width: 22, height: 19),
                 const SizedBox(width: 8),
-                Text('${widget.likes}'),
+                Text('${widget.post.likeCount}'),
                 const SizedBox(width: 16),
                 SvgPicture.asset('assets/icons/Posts/filledComment.svg',
                     width: 22, height: 19),
                 const SizedBox(width: 8),
-                Text('${widget.comments}'),
-                const SizedBox(width: 16),
-                SvgPicture.asset('assets/icons/Posts/filledSend.svg',
-                    width: 22, height: 19),
-                const SizedBox(width: 8),
-                Text('${widget.sends}'),
+                Text('${widget.post.commentCount}'),
               ],
             ),
           ),
@@ -107,20 +84,20 @@ class _TextPostState extends State<TextPost> {
                   ),
                 ),
                 const SizedBox(height: 4),
-                ...widget.topcomments.map(
+                ...widget.post.comments!.map(
                   (comment) => Padding(
                     padding: const EdgeInsets.only(top: 6),
                     child: RichText(
                       text: TextSpan(
                         children: [
                           TextSpan(
-                              text: "${getUserName(comment)}: ",
+                              text: "${comment.id}: ",
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 12,
                                   color: Colors.black)),
                           TextSpan(
-                              text: comment['text'],
+                              text: comment.content,
                               style: const TextStyle(
                                   fontSize: 12, color: Colors.black)),
                         ],

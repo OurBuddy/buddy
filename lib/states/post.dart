@@ -119,7 +119,7 @@ class PostProvider extends StateNotifier<PostState> {
       postImageUrl: filename,
     );
 
-    await client.from("posts").insert(post.toMap());
+    await client.from("posts").insert(post.toPostMap());
 
     await client.storage.from("posts").uploadBinary(
           filename,
@@ -129,14 +129,49 @@ class PostProvider extends StateNotifier<PostState> {
     return post.id;
   }
 
-  Future<void> fetchPosts() async {
-    state = state.copyWith(loading: true);
+  Future<List<Post>> fetchPosts({int start = 0, int limit = 20}) async {
+    final posts =
+        await client.from("posts").select("*").range(start, limit + start);
 
-    final posts = await client.from("posts").select("*").limit(50);
+    // get top 2 comments for each post
+    for (var post in posts) {
+      final comments = await client
+          .from("comments")
+          .select("*")
+          .eq("post", post["id"])
+          .limit(2);
+
+      post["comments"] = comments;
+
+      // Also get the user who created the post
+      final user = await client
+          .from("profile")
+          .select("username, personName, profilePic")
+          .eq("id", post["createdBy"])
+          .single();
+
+      post["username"] = user["username"];
+      post["userImageUrl"] = client.storage.from("profile-pics").getPublicUrl(
+            user["profilePic"],
+          );
+      post["petowner"] = user["personName"];
+    }
+    final newPosts = [
+      ...state.posts,
+      ...posts.map((e) => Post.fromMap(e)),
+    ];
+
+    // Remove duplicates
+    final seen = <String>{};
+    newPosts.removeWhere((element) => !seen.add(element.id));
+
+    //Sort by date (newest first)
+    newPosts.sort((a, b) => b.createdAt.compareTo(a.createdAt));
 
     state = state.copyWith(
-      posts: posts.map((e) => Post.fromMap(e)).toList(),
-      loading: false,
+      posts: newPosts,
     );
+
+    return newPosts;
   }
 }

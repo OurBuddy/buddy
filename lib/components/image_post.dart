@@ -1,28 +1,12 @@
+import 'package:buddy/data/post.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart'; // Import flutter_svg
 
 class ImagePost extends StatefulWidget {
-  final String username;
-  final String petowner;
-  final String userImageUrl;
-  final String postImageUrl;
-  final String caption;
-  final int likes;
-  final int comments;
-  final int sends;
-  final List<Map<String, String>> topcomments; // List of top comments
-
+  final Post post;
   const ImagePost({
     super.key,
-    required this.username,
-    required this.petowner,
-    required this.userImageUrl,
-    required this.postImageUrl,
-    required this.caption,
-    required this.likes,
-    required this.comments,
-    required this.sends,
-    required this.topcomments,
+    required this.post,
   });
 
   @override
@@ -30,12 +14,6 @@ class ImagePost extends StatefulWidget {
 }
 
 class _ImagePostState extends State<ImagePost> {
-  String getUserName(Map<String, String> comment) {
-    return comment.entries
-        .firstWhere((entry) => entry.key.startsWith('user'))
-        .value;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -49,7 +27,8 @@ class _ImagePostState extends State<ImagePost> {
               vertical: 4.0,
             ),
             leading: CircleAvatar(
-              backgroundImage: AssetImage(widget.userImageUrl),
+              backgroundImage: const AssetImage("assets/dog-sitting.png"),
+              foregroundImage: NetworkImage(widget.post.userImageUrl ?? ""),
             ),
             title: RichText(
               text: TextSpan(
@@ -59,10 +38,10 @@ class _ImagePostState extends State<ImagePost> {
                 ),
                 children: [
                   TextSpan(
-                      text: widget.username,
+                      text: widget.post.username,
                       style: const TextStyle(fontWeight: FontWeight.bold)),
                   TextSpan(
-                    text: '\n${widget.petowner}',
+                    text: '\n${widget.post.petowner}',
                     style: TextStyle(
                       fontWeight: FontWeight.normal,
                       fontSize: 12,
@@ -80,7 +59,7 @@ class _ImagePostState extends State<ImagePost> {
               },
             ),
           ),
-          Image.asset(widget.postImageUrl,
+          Image.network(widget.post.getPostImageUrl ?? "",
               errorBuilder: (context, error, stackTrace) {
             return const Icon(
                 Icons.error); // Provide a fallback icon in case of error
@@ -93,17 +72,13 @@ class _ImagePostState extends State<ImagePost> {
                 SvgPicture.asset('assets/icons/Posts/filledHeart.svg',
                     width: 22, height: 19),
                 const SizedBox(width: 8),
-                Text('${widget.likes}'),
+                Text('${widget.post.likeCount}'),
                 const SizedBox(width: 16),
                 SvgPicture.asset('assets/icons/Posts/filledComment.svg',
                     width: 22, height: 19),
                 const SizedBox(width: 8),
-                Text('${widget.comments}'),
+                Text('${widget.post.commentCount}'),
                 const SizedBox(width: 16),
-                SvgPicture.asset('assets/icons/Posts/filledSend.svg',
-                    width: 22, height: 19),
-                const SizedBox(width: 8),
-                Text('${widget.sends}'),
               ],
             ),
           ),
@@ -114,11 +89,11 @@ class _ImagePostState extends State<ImagePost> {
               text: TextSpan(
                 children: [
                   TextSpan(
-                      text: '${widget.username} ',
+                      text: '${widget.post.username} ',
                       style: const TextStyle(
                           fontWeight: FontWeight.bold, color: Colors.black)),
                   TextSpan(
-                      text: widget.caption,
+                      text: widget.post.caption,
                       style: const TextStyle(color: Colors.black)),
                 ],
               ),
@@ -140,20 +115,20 @@ class _ImagePostState extends State<ImagePost> {
                   ),
                 ),
                 const SizedBox(height: 4),
-                ...widget.topcomments.map(
+                ...(widget.post.comments ?? []).map(
                   (comment) => Padding(
                     padding: const EdgeInsets.only(top: 6),
                     child: RichText(
                       text: TextSpan(
                         children: [
                           TextSpan(
-                              text: "${getUserName(comment)}: ",
+                              text: "${comment.createdBy}: ",
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 12,
                                   color: Colors.black)),
                           TextSpan(
-                              text: comment['text'],
+                              text: comment.content,
                               style: const TextStyle(
                                   fontSize: 12, color: Colors.black)),
                         ],
