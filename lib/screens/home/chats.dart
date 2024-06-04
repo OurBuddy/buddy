@@ -1,3 +1,4 @@
+import 'package:beamer/beamer.dart';
 import 'package:buddy/components/appbar.dart';
 import 'package:buddy/components/navbar.dart';
 import 'package:buddy/states/providers.dart';
@@ -27,7 +28,7 @@ class _ChatsScreenState extends ConsumerState<ChatsScreen> {
           child: const ChannelListPage(),
         );
       }),
-      backgroundColor: const Color(0xFFE7E6E6),
+      backgroundColor: Theme.of(context).colorScheme.background,
     );
   }
 }
@@ -63,38 +64,9 @@ class _ChannelListPageState extends State<ChannelListPage> {
       body: StreamChannelListView(
         controller: _listController,
         onChannelTap: (channel) {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) {
-                return StreamChannel(
-                  channel: channel,
-                  child: const ChannelPage(),
-                );
-              },
-            ),
-          );
+          // Set the current channel
+          Beamer.of(context).beamToNamed('/chat/${channel.cid}', data: channel);
         },
-      ),
-    );
-  }
-}
-
-class ChannelPage extends StatelessWidget {
-  const ChannelPage({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      appBar: StreamChannelHeader(),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: StreamMessageListView(),
-          ),
-          StreamMessageInput(),
-        ],
       ),
     );
   }

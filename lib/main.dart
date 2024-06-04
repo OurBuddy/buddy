@@ -1,4 +1,5 @@
 import 'package:beamer/beamer.dart';
+import 'package:buddy/screens/home/channel_screen.dart';
 import 'package:buddy/screens/home/chats.dart';
 import 'package:buddy/screens/home/feed.dart';
 import 'package:buddy/screens/home/profile.dart';
@@ -16,6 +17,7 @@ import 'package:buddy/states/user.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
@@ -158,6 +160,9 @@ class _BuddyState extends ConsumerState<Buddy> {
 
           '/feed': (context, state, data) => const FeedScreen(),
           '/chat': (context, state, data) => const ChatsScreen(),
+          '/chat/:id': (context, state, data) {
+            return ChannelScreen(id: data as Channel);
+          },
           '/profile': (context, state, data) => const ProfileScreen(),
           '/profile/:id': (context, state, data) {
             final id = state.pathParameters['id'];

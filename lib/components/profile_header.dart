@@ -1,3 +1,4 @@
+import 'package:beamer/beamer.dart';
 import 'package:buddy/components/buttons.dart';
 import 'package:buddy/data/profile.dart';
 import 'package:buddy/states/providers.dart';
@@ -256,21 +257,63 @@ class _BuddyButtonState extends ConsumerState<BuddyButton> {
                 snapshot.hasData &&
                 snapshot.data['isBuddy'] == true;
           }
+          if (isBuddyInt ?? false) {
+            return Row(
+              children: [
+                Expanded(
+                  child: Button(
+                    onPressed: () async {
+                      final chat =
+                          await ref.read(chatProvider.notifier).createChat(
+                                widget.widget.profile!.id,
+                                widget.widget.profile!.username,
+                              );
+
+                      Beamer.of(context)
+                          .beamToNamed('/chat/${chat.cid}', data: chat);
+                    },
+                    child: const Text('Message'),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Button(
+                    onPressed: () async {
+                      setState(() {
+                        isBuddyInt = false;
+                      });
+                      try {
+                        await ref.read(userProvider.notifier).removeBuddy(
+                              widget.widget.profile!.id,
+                            );
+                      } catch (e) {
+                        setState(() {
+                          isBuddyInt = true;
+                        });
+                      }
+                    },
+                    child: const Text('Unbuddy'),
+                  ),
+                ),
+              ],
+            );
+          }
           return Button(
             isLoading: snapshot.connectionState == ConnectionState.waiting,
             onPressed: () async {
-              if (isBuddyInt!) {
-                await ref.read(userProvider.notifier).removeBuddy(
-                      widget.widget.profile!.id,
-                    );
-              } else {
+              setState(() {
+                isBuddyInt = true;
+              });
+
+              try {
                 await ref.read(userProvider.notifier).addBuddy(
                       widget.widget.profile!.id,
                     );
+              } catch (e) {
+                setState(() {
+                  isBuddyInt = false;
+                });
               }
-              setState(() {
-                isBuddyInt = !isBuddyInt!;
-              });
             },
             child: Text(
               isBuddyInt ?? false ? 'Unbuddy' : 'Buddy',
