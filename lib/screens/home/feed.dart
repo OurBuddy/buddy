@@ -49,9 +49,9 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                   itemBuilder: (context, index) {
                     final post = snapshot.data![index];
                     if (post.postImageUrl != null) {
-                      return ImagePost(post: post);
+                      return ImagePost(post: post, key: Key(post.id));
                     } else {
-                      return TextPost(post: post);
+                      return TextPost(post: post, key: Key(post.id));
                     }
                   },
                 ),

@@ -20,6 +20,8 @@ class Post {
   get getPostImageUrl => Supabase.instance.client.storage
       .from('posts')
       .getPublicUrl(postImageUrl!);
+  get isLiked =>
+      likedBy.contains(Supabase.instance.client.auth.currentUser!.id);
 
   Post({
     required this.id,
@@ -35,6 +37,19 @@ class Post {
   }) {
     assert(postImageUrl != null || caption != null,
         'Post must have either an image or a caption');
+  }
+
+  Future<void> like() async {
+    if (likedBy.contains(Supabase.instance.client.auth.currentUser!.id)) {
+      likedBy.remove(Supabase.instance.client.auth.currentUser!.id);
+    } else {
+      likedBy.add(Supabase.instance.client.auth.currentUser!.id);
+    }
+
+    await Supabase.instance.client
+        .from('posts')
+        .update(toPostMap())
+        .eq('id', id);
   }
 
   Post copyWith({
