@@ -16,7 +16,9 @@ class ProfileHeader extends StatefulHookConsumerWidget {
 class _ProfileHeaderState extends ConsumerState<ProfileHeader> {
   @override
   Widget build(BuildContext context) {
-    final profile = ref.read(userProvider.notifier).getProfileStats();
+    final profile = ref.read(userProvider.notifier).getProfileStats(
+          id: widget.profile!.id,
+        );
 
     final isOwnProfile =
         ref.read(userProvider).profile!.id == widget.profile!.id;
@@ -101,6 +103,11 @@ class _ProfileHeaderState extends ConsumerState<ProfileHeader> {
                                   return const Center(
                                       child: CircularProgressIndicator());
                                 }
+                                if (snapshot.hasError) {
+                                  return const Center(
+                                      child: Text('An error occurred'));
+                                }
+
                                 return Row(
                                   children: [
                                     Expanded(
@@ -134,7 +141,7 @@ class _ProfileHeaderState extends ConsumerState<ProfileHeader> {
                                       child: Column(
                                         children: <Widget>[
                                           Text(
-                                            snapshot.data['pics'].toString(),
+                                            snapshot.data!['pics'].toString(),
                                             textAlign: TextAlign.center,
                                             style: Theme.of(context)
                                                 .textTheme
@@ -161,7 +168,7 @@ class _ProfileHeaderState extends ConsumerState<ProfileHeader> {
                                       child: Column(
                                         children: <Widget>[
                                           Text(
-                                            snapshot.data['posts'].toString(),
+                                            snapshot.data!['posts'].toString(),
                                             textAlign: TextAlign.center,
                                             style: Theme.of(context)
                                                 .textTheme
@@ -208,15 +215,67 @@ class _ProfileHeaderState extends ConsumerState<ProfileHeader> {
               ),
             ),
             if (!isOwnProfile)
-              Button(
-                onPressed: () {
-                  //ref.read(userProvider.notifier).addBuddy(widget.profile!.id);
-                },
-                child: const Text("Become Buddies"),
+              BuddyButton(
+                ref: ref,
+                widget: widget,
+                profile: profile,
               )
           ],
         ),
       ),
     );
+  }
+}
+
+class BuddyButton extends StatefulHookConsumerWidget {
+  const BuddyButton({
+    super.key,
+    required this.ref,
+    required this.widget,
+    required this.profile,
+  });
+
+  final WidgetRef ref;
+  final ProfileHeader widget;
+  final Future<dynamic> profile;
+
+  @override
+  ConsumerState<BuddyButton> createState() => _BuddyButtonState();
+}
+
+class _BuddyButtonState extends ConsumerState<BuddyButton> {
+  bool? isBuddyInt;
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+        future: widget.profile,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done &&
+              isBuddyInt == null) {
+            isBuddyInt = snapshot.connectionState == ConnectionState.done &&
+                snapshot.hasData &&
+                snapshot.data['isBuddy'] == true;
+          }
+          return Button(
+            isLoading: snapshot.connectionState == ConnectionState.waiting,
+            onPressed: () async {
+              if (isBuddyInt!) {
+                await ref.read(userProvider.notifier).removeBuddy(
+                      widget.widget.profile!.id,
+                    );
+              } else {
+                await ref.read(userProvider.notifier).addBuddy(
+                      widget.widget.profile!.id,
+                    );
+              }
+              setState(() {
+                isBuddyInt = !isBuddyInt!;
+              });
+            },
+            child: Text(
+              isBuddyInt ?? false ? 'Unbuddy' : 'Buddy',
+            ),
+          );
+        });
   }
 }

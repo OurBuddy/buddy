@@ -269,7 +269,6 @@ class UserProvider extends StateNotifier<UserState> {
     final res = await Supabase.instance.client.functions
         .invoke("getProfileDetails", body: {"reqUserId": id});
 
-
     return res.data;
   }
 
@@ -477,7 +476,6 @@ class UserProvider extends StateNotifier<UserState> {
       config: config,
     ));
 
-
     await Supabase.instance.client.storage.from("profile-pics").uploadBinary(
           "${state.profile!.id}/profile.jpg",
           compImg.rawBytes,
@@ -491,6 +489,44 @@ class UserProvider extends StateNotifier<UserState> {
         imageUrl: Supabase.instance.client.storage
             .from("profile-pics")
             .getPublicUrl("${state.profile!.id}/profile.jpg")));
+  }
+
+  addBuddy(String id) async {
+    final loggedInId = ref.read(authProvider).session?.user.id;
+
+    if (loggedInId == null) {
+      throw "No session or ID found";
+    }
+
+    await Supabase.instance.client.from('buddies').upsert({
+      "requestId": loggedInId,
+      "targetId": id,
+      "pending": false,
+    });
+  }
+
+  Future<void> removeBuddy(String id) async {
+    final loggedInId = ref.read(authProvider).session?.user.id;
+
+    if (loggedInId == null) {
+      throw "No session or ID found";
+    }
+
+    try {
+      await Supabase.instance.client
+          .from('buddies')
+          .delete()
+          .eq('requestId', loggedInId)
+          .eq('targetId', id);
+    } catch (e) {}
+
+    try {
+      await Supabase.instance.client
+          .from('buddies')
+          .delete()
+          .eq('requestId', id)
+          .eq('targetId', loggedInId);
+    } catch (e) {}
   }
 
   void logout() {

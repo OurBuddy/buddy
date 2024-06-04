@@ -136,7 +136,7 @@ class _BuddyState extends ConsumerState<Buddy> {
 
   BeamerDelegate router(BuildContext context, WidgetRef ref) {
     return BeamerDelegate(
-      initialPath: '/',
+      initialPath: '/profile/5c100b15-c043-42df-b754-db6333eff426',
       locationBuilder: RoutesLocationBuilder(
         routes: {
           // Return either Widgets or BeamPages if more customization is needed
@@ -159,7 +159,10 @@ class _BuddyState extends ConsumerState<Buddy> {
           '/feed': (context, state, data) => const FeedScreen(),
           '/chat': (context, state, data) => const ChatsScreen(),
           '/profile': (context, state, data) => const ProfileScreen(),
-          '/profile/:id': (context, state, data) => const ProfileScreen(),
+          '/profile/:id': (context, state, data) {
+            final id = state.pathParameters['id'];
+            return ProfileScreen(id: id);
+          },
 
           // Redirect / to /feed
         },
@@ -170,11 +173,6 @@ class _BuddyState extends ConsumerState<Buddy> {
           guardNonMatching: true,
           check: (context, location) => ref.watch(authProvider).isSignedIn,
           beamToNamed: (origin, target) => '/welcome',
-        ),
-        BeamGuard(
-          pathPatterns: ['/'],
-          check: (context, location) => false,
-          beamToNamed: (origin, target) => '/feed',
         ),
       ],
     );

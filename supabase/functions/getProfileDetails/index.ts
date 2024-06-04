@@ -67,12 +67,25 @@ Deno.serve(async (req) => {
   const imageCount = postsData!.filter((post) => post.postImageURL).length;
   const textCount = postsData!.length - imageCount;
 
+  // Wether the user is a buddy of the logged in user
+  const isBuddy1 = await supabaseClient.from("buddies").select("*").eq(
+    "requestId",
+    userId,
+  ).eq("targetId", reqUserId).single();
+  const isBuddy2 = await supabaseClient.from("buddies").select("*").eq(
+    "requestId",
+    reqUserId,
+  ).eq("targetId", userId).single();
+
+  const isBuddy = isBuddy1.data !== null || isBuddy2.data !== null;
+
   // Respond with the created token
   return new Response(
     JSON.stringify({
       "buddies": buddiesCount,
       "pics": imageCount,
       "posts": textCount,
+      "isBuddy": isBuddy,
     }),
     {
       status: 200,
