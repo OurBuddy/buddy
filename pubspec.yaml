@@ -58,6 +58,7 @@ dependencies:
   stream_chat_flutter: ^7.0.0
   connectivity_plus: '5.0.2'
   uuid: ^4.4.0
+  better_skeleton: ^0.1.0
 
 dev_dependencies:
   flutter_test:

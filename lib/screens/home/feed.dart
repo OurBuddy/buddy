@@ -31,23 +31,30 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
         return FutureBuilder(
             future: posts,
             builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
+              if (snapshot.data == null) {
                 return const Center(child: CircularProgressIndicator());
               }
               if (snapshot.hasError || snapshot.data == null) {
                 return const Center(child: Text('Error loading posts'));
               }
-              return ListView.builder(
-                itemCount: snapshot.data!.length,
-                controller: scroll,
-                itemBuilder: (context, index) {
-                  final post = snapshot.data![index];
-                  if (post.postImageUrl != null) {
-                    return ImagePost(post: post);
-                  } else {
-                    return TextPost(post: post);
-                  }
+              return RefreshIndicator(
+                onRefresh: () async {
+                  posts = ref.read(postProvider.notifier).fetchPosts();
+                  setState(() {});
+                  await posts;
                 },
+                child: ListView.builder(
+                  itemCount: snapshot.data!.length,
+                  controller: scroll,
+                  itemBuilder: (context, index) {
+                    final post = snapshot.data![index];
+                    if (post.postImageUrl != null) {
+                      return ImagePost(post: post);
+                    } else {
+                      return TextPost(post: post);
+                    }
+                  },
+                ),
               );
             });
       }),

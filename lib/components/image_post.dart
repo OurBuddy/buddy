@@ -1,8 +1,12 @@
+import 'package:better_skeleton/skeleton_container.dart';
 import 'package:buddy/data/post.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart'; // Import flutter_svg
+import 'package:flutter/widgets.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart'; // Import flutter_svg
 
-class ImagePost extends StatefulWidget {
+class ImagePost extends StatefulHookConsumerWidget {
   final Post post;
   const ImagePost({
     super.key,
@@ -10,10 +14,27 @@ class ImagePost extends StatefulWidget {
   });
 
   @override
-  State<ImagePost> createState() => _ImagePostState();
+  ConsumerState<ImagePost> createState() => _ImagePostState();
 }
 
-class _ImagePostState extends State<ImagePost> {
+class _ImagePostState extends ConsumerState<ImagePost>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController animationController;
+
+  @override
+  void initState() {
+    super.initState();
+    animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 1000))
+          ..repeat();
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -59,11 +80,40 @@ class _ImagePostState extends State<ImagePost> {
               },
             ),
           ),
-          Image.network(widget.post.getPostImageUrl ?? "",
-              errorBuilder: (context, error, stackTrace) {
-            return const Icon(
-                Icons.error); // Provide a fallback icon in case of error
-          }),
+          AspectRatio(
+            aspectRatio: 4 / 5,
+            child: SizedBox(
+              width: double.infinity,
+              child: Image.network(
+                widget.post.getPostImageUrl ?? "",
+                gaplessPlayback: true,
+                errorBuilder: (context, error, stackTrace) {
+                  return const Center(
+                    child: Text(
+                      'Failed to load image',
+                    ),
+                  );
+                },
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) {
+                    return child;
+                  } else {
+                    if (loadingProgress.cumulativeBytesLoaded ==
+                        loadingProgress.expectedTotalBytes) {
+                      return child;
+                    }
+                    return AnimatedSkeleton(
+                      listenable: animationController,
+                      child: Container(
+                        width: double.infinity,
+                        color: Colors.grey[200],
+                      ),
+                    );
+                  }
+                },
+              ),
+            ),
+          ),
           Padding(
             padding:
                 const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
