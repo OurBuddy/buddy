@@ -99,7 +99,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             children: [
                               const SizedBox(height: 20),
                               Image.asset(
-                                'assets/floating-cat.png',
+                                'assets/dog-with-leash.png',
                                 width: 200,
                               ),
                               const SizedBox(height: 20),
