@@ -1,3 +1,4 @@
+import 'package:beamer/beamer.dart';
 import 'package:better_skeleton/skeleton_container.dart';
 import 'package:buddy/data/post.dart';
 import 'package:buddy/states/providers.dart';
@@ -38,7 +39,7 @@ class _PicGridViewState extends ConsumerState<PicGridView>
     return FutureBuilder(
         future: pics,
         builder: (context, snapshot) {
-          if (snapshot.hasError || snapshot.data == null) {
+          if (snapshot.hasError) {
             return SliverToBoxAdapter(
                 child: Text('Error loading posts: ${snapshot.error}'));
           }
@@ -81,6 +82,9 @@ class _PicGridViewState extends ConsumerState<PicGridView>
                 return const SizedBox();
               }
               return GestureDetector(
+                onTap: () {
+                  Beamer.of(context).beamToNamed('/post/${post.id}');
+                },
                 child: ClipRRect(
                   borderRadius: const BorderRadius.all(Radius.circular(8)),
                   child: AspectRatio(

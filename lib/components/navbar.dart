@@ -3,13 +3,16 @@ import 'dart:ui';
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_floating_bottom_bar/flutter_floating_bottom_bar.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class BottomNav extends StatefulHookConsumerWidget {
-  const BottomNav({super.key, required this.body, this.back = false});
+  const BottomNav(
+      {super.key, required this.body, this.back = false, this.backDestination});
 
   final Widget Function(BuildContext, ScrollController) body;
   final bool back;
+  final String? backDestination;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _BottomNavState();
@@ -62,90 +65,120 @@ class _BottomNavState extends ConsumerState<BottomNav> {
               color: Colors.white.withOpacity(0.8),
               child: SizedBox(
                 width: double.infinity,
-                child: Row(
-                  children: [
-                    TextButton.icon(
-                      onPressed: () {
-                        Beamer.of(context).beamToNamed("/feed");
-                      },
-                      icon: Image.asset(
-                        loc.path.startsWith("/feed")
-                            ? "assets/icons/home-color.png"
-                            : "assets/icons/home-clay.png",
-                        width: 34,
-                      ),
-                      style: TextButton.styleFrom(
-                        backgroundColor: loc.path.startsWith("/feed")
-                            ? Colors.black
-                            : Colors.transparent,
-                      ),
-                      label: Text(
-                        "Home",
-                        style: TextStyle(
-                          color: loc.path.startsWith("/feed")
-                              ? Colors.white
-                              : Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
+                child: widget.back
+                    ? TextButton.icon(
+                        onPressed: () {
+                          if (widget.backDestination != null) {
+                            Beamer.of(context)
+                                .beamToNamed(widget.backDestination!);
+                          } else {
+                            if (Beamer.of(context).canBeamBack) {
+                              Beamer.of(context).beamBack();
+                            } else {
+                              Beamer.of(context).beamToNamed("/feed");
+                            }
+                          }
+                        },
+                        icon: Padding(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: SvgPicture.asset(
+                            "assets/icons/arrow.svg",
+                            width: 16,
+                          ),
                         ),
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-                    TextButton.icon(
-                      onPressed: () {
-                        Beamer.of(context).beamToNamed("/chat");
-                      },
-                      icon: Image.asset(
-                        loc.path.startsWith("/chat")
-                            ? "assets/icons/chat-color.png"
-                            : "assets/icons/chat-clay.png",
-                        width: 34,
-                      ),
-                      style: TextButton.styleFrom(
-                        backgroundColor: loc.path.startsWith("/chat")
-                            ? Colors.black
-                            : Colors.transparent,
-                      ),
-                      label: Text(
-                        "Chats",
-                        style: TextStyle(
-                          color: loc.path.startsWith("/chat")
-                              ? Colors.white
-                              : Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
+                        label: const Text(
+                          "Back",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
+                      )
+                    : Row(
+                        children: [
+                          TextButton.icon(
+                            onPressed: () {
+                              Beamer.of(context).beamToNamed("/feed");
+                            },
+                            icon: Image.asset(
+                              loc.path.startsWith("/feed")
+                                  ? "assets/icons/home-color.png"
+                                  : "assets/icons/home-clay.png",
+                              width: 34,
+                            ),
+                            style: TextButton.styleFrom(
+                              backgroundColor: loc.path.startsWith("/feed")
+                                  ? Colors.black
+                                  : Colors.transparent,
+                            ),
+                            label: Text(
+                              "Home",
+                              style: TextStyle(
+                                color: loc.path.startsWith("/feed")
+                                    ? Colors.white
+                                    : Colors.black,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          TextButton.icon(
+                            onPressed: () {
+                              Beamer.of(context).beamToNamed("/chat");
+                            },
+                            icon: Image.asset(
+                              loc.path.startsWith("/chat")
+                                  ? "assets/icons/chat-color.png"
+                                  : "assets/icons/chat-clay.png",
+                              width: 34,
+                            ),
+                            style: TextButton.styleFrom(
+                              backgroundColor: loc.path.startsWith("/chat")
+                                  ? Colors.black
+                                  : Colors.transparent,
+                            ),
+                            label: Text(
+                              "Chats",
+                              style: TextStyle(
+                                color: loc.path.startsWith("/chat")
+                                    ? Colors.white
+                                    : Colors.black,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          TextButton.icon(
+                            onPressed: () {
+                              Beamer.of(context).beamToNamed("/profile");
+                            },
+                            icon: Image.asset(
+                              loc.path.startsWith("/profile")
+                                  ? "assets/icons/paw-color.png"
+                                  : "assets/icons/paw-clay.png",
+                              width: 34,
+                            ),
+                            style: TextButton.styleFrom(
+                              backgroundColor: loc.path.startsWith("/profile")
+                                  ? Colors.black
+                                  : Colors.transparent,
+                            ),
+                            label: Text(
+                              "Buddy",
+                              style: TextStyle(
+                                color: loc.path.startsWith("/profile")
+                                    ? Colors.white
+                                    : Colors.black,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    const SizedBox(width: 4),
-                    TextButton.icon(
-                      onPressed: () {
-                        Beamer.of(context).beamToNamed("/profile");
-                      },
-                      icon: Image.asset(
-                        loc.path.startsWith("/profile")
-                            ? "assets/icons/paw-color.png"
-                            : "assets/icons/paw-clay.png",
-                        width: 34,
-                      ),
-                      style: TextButton.styleFrom(
-                        backgroundColor: loc.path.startsWith("/profile")
-                            ? Colors.black
-                            : Colors.transparent,
-                      ),
-                      label: Text(
-                        "Buddy",
-                        style: TextStyle(
-                          color: loc.path.startsWith("/profile")
-                              ? Colors.white
-                              : Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
               ),
             ),
           ),

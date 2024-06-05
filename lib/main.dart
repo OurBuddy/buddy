@@ -2,6 +2,7 @@ import 'package:beamer/beamer.dart';
 import 'package:buddy/screens/home/channel_screen.dart';
 import 'package:buddy/screens/home/chats.dart';
 import 'package:buddy/screens/home/feed.dart';
+import 'package:buddy/screens/home/post.dart';
 import 'package:buddy/screens/home/profile.dart';
 import 'package:buddy/screens/welcome/login.dart';
 import 'package:buddy/screens/welcome/magic_link.dart';
@@ -169,7 +170,9 @@ class _BuddyState extends ConsumerState<Buddy> {
             return ProfileScreen(id: id);
           },
 
-          // Redirect / to /feed
+          '/post/:id': (context, state, data) => PostScreen(
+                id: state.pathParameters["id"]!,
+              ),
         },
       ).call,
       guards: [

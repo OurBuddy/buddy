@@ -228,4 +228,30 @@ class PostProvider extends StateNotifier<PostState> {
 
     return newPosts;
   }
+
+  Future<Post> fetchPost(String id) async {
+    final post = await client.from("posts").select("*").eq("id", id).single();
+
+    final comments = await client
+        .from("comments")
+        .select("*")
+        .eq("post", post["id"])
+        .limit(100);
+
+    post["comments"] = comments;
+
+    final user = await client
+        .from("profile")
+        .select("username, personName, profilePic")
+        .eq("id", post["createdBy"])
+        .single();
+
+    post["username"] = user["username"];
+    post["userImageUrl"] = client.storage.from("profile-pics").getPublicUrl(
+          user["profilePic"],
+        );
+    post["petowner"] = user["personName"];
+
+    return Post.fromMap(post);
+  }
 }
