@@ -531,6 +531,30 @@ class UserProvider extends StateNotifier<UserState> {
     } catch (e) {}
   }
 
+  Future<List<Profile>?> searchProfiles(String query) async {
+    // Trim, at least 3 characters
+    if (query.trim().length < 3) {
+      return null;
+    }
+
+    final loggedInId = ref.read(authProvider).session?.user.id;
+
+    if (loggedInId == null) {
+      throw "No session or ID found";
+    }
+
+    final res = await Supabase.instance.client.from('profile').select().or(
+          "username.ilike.%$query%,petName.ilike.%$query%,personName.ilike.%$query%",
+        );
+
+    final profiles = res;
+
+    return profiles
+        .map((e) => Profile.fromMap(e))
+        .where((element) => element.id != loggedInId)
+        .toList();
+  }
+
   void logout() {
     final sanitizedProfile = Profile(
       id: "local",

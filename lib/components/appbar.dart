@@ -1,5 +1,6 @@
 import 'package:buddy/components/image_poster.dart';
 import 'package:buddy/components/new_post.dart';
+import 'package:buddy/components/search.dart';
 import 'package:buddy/components/text_poster.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -75,7 +76,21 @@ class AppBarBuddy extends StatelessWidget implements PreferredSizeWidget {
               ),
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return const AlertDialog(
+                        scrollable: true,
+                        insetPadding: EdgeInsets.all(10),
+                        title: Text("Search"),
+                        content: SizedBox(
+                          width: double.infinity,
+                          child: SearchDialog(),
+                        ),
+                      );
+                    });
+              },
               icon: Container(
                 margin: const EdgeInsets.all(4),
                 padding: const EdgeInsets.all(4.0),
