@@ -3,6 +3,7 @@ import 'package:buddy/components/image_post_switch.dart';
 import 'package:buddy/components/navbar.dart';
 import 'package:buddy/components/pic_grid.dart';
 import 'package:buddy/components/profile_header.dart';
+import 'package:buddy/components/text_list.dart';
 import 'package:buddy/data/profile.dart';
 import 'package:buddy/states/providers.dart';
 import 'package:flutter/material.dart';
@@ -73,7 +74,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           sliver: PicGridView(id: widget.id),
                         )
                       else
-                        const SliverToBoxAdapter(child: SizedBox()),
+                        SliverSafeArea(
+                          top: false,
+                          minimum: const EdgeInsets.only(bottom: 80),
+                          sliver: TextListView(id: widget.id),
+                        ),
                     ],
                   ),
                 );

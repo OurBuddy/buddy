@@ -100,7 +100,7 @@ class PostProvider extends StateNotifier<PostState> {
       caption: text.trim(),
     );
 
-    await client.from("posts").insert(post.toMap());
+    await client.from("posts").insert(post.toPostMap());
 
     return post.id;
   }

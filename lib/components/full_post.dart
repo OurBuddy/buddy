@@ -1,3 +1,4 @@
+import 'package:beamer/beamer.dart';
 import 'package:better_skeleton/skeleton_container.dart';
 import 'package:buddy/data/post.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -44,13 +45,19 @@ class _FullPostState extends ConsumerState<FullPost>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           ListTile(
+            onTap: () {
+              Beamer.of(context)
+                  .beamToNamed('/profile/${widget.post.createdBy}');
+            },
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 16.0,
               vertical: 4.0,
             ),
             leading: CircleAvatar(
               backgroundImage: const AssetImage("assets/dog-sitting.png"),
-              foregroundImage: NetworkImage(widget.post.userImageUrl ?? ""),
+              foregroundImage: CachedNetworkImageProvider(
+                widget.post.userImageUrl ?? "",
+              ),
             ),
             title: RichText(
               text: TextSpan(

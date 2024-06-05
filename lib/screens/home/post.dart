@@ -37,6 +37,7 @@ class _PostScreenState extends ConsumerState<PostScreen> {
                       child: SingleChildScrollView(
                         child: FullPost(
                           post: snapshot.data!,
+                          key: ValueKey(snapshot.data!.hashCode),
                         ),
                       ));
                 }),

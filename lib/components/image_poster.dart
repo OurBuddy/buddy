@@ -102,8 +102,8 @@ class _ImagePostDialogState extends ConsumerState<ImagePostDialog> {
                                 ? profile.hasPet
                                     ? const AssetImage('assets/dog-sitting.png')
                                     : const AssetImage('assets/person.png')
-                                : CachedNetworkImage(
-                                    imageUrl: Supabase.instance.client.storage
+                                : CachedNetworkImageProvider(
+                                    Supabase.instance.client.storage
                                         .from('profile-pics')
                                         .getPublicUrl(profile.imageUrl!),
                                   ) as ImageProvider<Object>?,

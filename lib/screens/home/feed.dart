@@ -47,7 +47,7 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                   controller: scroll,
                   itemBuilder: (context, index) {
                     final post = snapshot.data![index];
-                    return FullPost(post: post);
+                    return FullPost(post: post, key: ValueKey(post.hashCode));
                   },
                 ),
               );
