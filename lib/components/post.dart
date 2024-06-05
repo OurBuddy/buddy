@@ -6,18 +6,18 @@ import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:timeago/timeago.dart'; // Import flutter_svg
 
-class ImagePost extends StatefulHookConsumerWidget {
+class FullPost extends StatefulHookConsumerWidget {
   final Post post;
-  const ImagePost({
+  const FullPost({
     super.key,
     required this.post,
   });
 
   @override
-  ConsumerState<ImagePost> createState() => _ImagePostState();
+  ConsumerState<FullPost> createState() => _FullPostState();
 }
 
-class _ImagePostState extends ConsumerState<ImagePost>
+class _FullPostState extends ConsumerState<FullPost>
     with SingleTickerProviderStateMixin {
   late final AnimationController animationController;
 
@@ -88,40 +88,50 @@ class _ImagePostState extends ConsumerState<ImagePost>
               await Future.delayed(const Duration(milliseconds: 100));
               await HapticFeedback.lightImpact();
             },
-            child: AspectRatio(
-              aspectRatio: 4 / 5,
-              child: SizedBox(
-                width: double.infinity,
-                child: Image.network(
-                  widget.post.getPostImageUrl ?? "",
-                  gaplessPlayback: true,
-                  errorBuilder: (context, error, stackTrace) {
-                    return const Center(
-                      child: Text(
-                        'Failed to load image',
+            child: widget.post.postImageUrl == null
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Text(
+                      widget.post.caption!,
+                      style: const TextStyle(
+                        fontSize: 18,
                       ),
-                    );
-                  },
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) {
-                      return child;
-                    } else {
-                      if (loadingProgress.cumulativeBytesLoaded ==
-                          loadingProgress.expectedTotalBytes) {
-                        return child;
-                      }
-                      return AnimatedSkeleton(
-                        listenable: animationController,
-                        child: Container(
-                          width: double.infinity,
-                          color: Colors.grey[200],
-                        ),
-                      );
-                    }
-                  },
-                ),
-              ),
-            ),
+                    ),
+                  )
+                : AspectRatio(
+                    aspectRatio: 4 / 5,
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: Image.network(
+                        widget.post.getPostImageUrl ?? "",
+                        gaplessPlayback: true,
+                        errorBuilder: (context, error, stackTrace) {
+                          return const Center(
+                            child: Text(
+                              'Failed to load image',
+                            ),
+                          );
+                        },
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) {
+                            return child;
+                          } else {
+                            if (loadingProgress.cumulativeBytesLoaded ==
+                                loadingProgress.expectedTotalBytes) {
+                              return child;
+                            }
+                            return AnimatedSkeleton(
+                              listenable: animationController,
+                              child: Container(
+                                width: double.infinity,
+                                color: Colors.grey[200],
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                    ),
+                  ),
           ),
           Padding(
             padding:
@@ -167,23 +177,24 @@ class _ImagePostState extends ConsumerState<ImagePost>
               ],
             ),
           ),
-          Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            child: RichText(
-              text: TextSpan(
-                children: [
-                  TextSpan(
-                      text: '${widget.post.username} ',
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black)),
-                  TextSpan(
-                      text: widget.post.caption,
-                      style: const TextStyle(color: Colors.black)),
-                ],
+          if (widget.post.postImageUrl != null)
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              child: RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                        text: '${widget.post.username} ',
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.black)),
+                    TextSpan(
+                        text: widget.post.caption,
+                        style: const TextStyle(color: Colors.black)),
+                  ],
+                ),
               ),
             ),
-          ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Column(

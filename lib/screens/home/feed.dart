@@ -1,10 +1,9 @@
 import 'package:buddy/components/appbar.dart';
 import 'package:buddy/components/navbar.dart';
-import 'package:buddy/components/text_post.dart';
 import 'package:buddy/data/post.dart';
 import 'package:buddy/states/providers.dart';
 import 'package:flutter/material.dart';
-import 'package:buddy/components/image_post.dart';
+import 'package:buddy/components/post.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class FeedScreen extends StatefulHookConsumerWidget {
@@ -48,11 +47,7 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                   controller: scroll,
                   itemBuilder: (context, index) {
                     final post = snapshot.data![index];
-                    if (post.postImageUrl != null) {
-                      return ImagePost(post: post, key: Key(post.id));
-                    } else {
-                      return TextPost(post: post, key: Key(post.id));
-                    }
+                    return FullPost(post: post);
                   },
                 ),
               );

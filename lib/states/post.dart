@@ -129,33 +129,36 @@ class PostProvider extends StateNotifier<PostState> {
     return post.id;
   }
 
-  Future<List<Post>> fetchPosts({int start = 0, int limit = 20}) async {
+  Future<List<Post>> fetchPosts(
+      {int start = 0, int limit = 20, getAllData = true}) async {
     final posts =
         await client.from("posts").select("*").range(start, limit + start);
 
-    // get top 2 comments for each post
-    for (var post in posts) {
-      final comments = await client
-          .from("comments")
-          .select("*")
-          .eq("post", post["id"])
-          .limit(2);
+    if (getAllData) {
+      for (var post in posts) {
+        final comments = await client
+            .from("comments")
+            .select("*")
+            .eq("post", post["id"])
+            .limit(100);
 
-      post["comments"] = comments;
+        post["comments"] = comments;
 
-      // Also get the user who created the post
-      final user = await client
-          .from("profile")
-          .select("username, personName, profilePic")
-          .eq("id", post["createdBy"])
-          .single();
+        // Also get the user who created the post
+        final user = await client
+            .from("profile")
+            .select("username, personName, profilePic")
+            .eq("id", post["createdBy"])
+            .single();
 
-      post["username"] = user["username"];
-      post["userImageUrl"] = client.storage.from("profile-pics").getPublicUrl(
-            user["profilePic"],
-          );
-      post["petowner"] = user["personName"];
+        post["username"] = user["username"];
+        post["userImageUrl"] = client.storage.from("profile-pics").getPublicUrl(
+              user["profilePic"],
+            );
+        post["petowner"] = user["personName"];
+      }
     }
+
     final newPosts = [
       ...state.posts,
       ...posts.map((e) => Post.fromMap(e)),
