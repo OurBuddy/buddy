@@ -26,7 +26,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         authNotif.setInitial();
         Beamer.of(context).beamToNamed('/welcome/magicLink');
       }
-      if (auth.isSignedIn) Beamer.of(context).beamToNamed('/');
+      if (auth.isSignedIn) Beamer.of(context).beamToNamed('/feed');
     });
 
     return Scaffold(

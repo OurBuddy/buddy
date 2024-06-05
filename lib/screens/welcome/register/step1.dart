@@ -79,8 +79,8 @@ class _SignUpStep1State extends ConsumerState<SignUpStep1> {
                           controller: usernameController,
                           onChanged: (_) {
                             setState(() {
-                              isUserAvailable = Future.delayed(
-                                  Durations.extralong1, () => false);
+                              isUserAvailable = signupNotif.checkUsername(
+                                  username: usernameController.text);
                             });
                           },
                         ),

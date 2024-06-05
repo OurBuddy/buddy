@@ -1,3 +1,4 @@
+import 'package:beamer/beamer.dart';
 import 'package:buddy/components/appbar.dart';
 import 'package:buddy/components/buttons.dart';
 import 'package:buddy/components/image_post_switch.dart';
@@ -58,15 +59,24 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         child: ProfileHeader(profile: snapshot.data),
                       ),
                       SliverToBoxAdapter(
-                        child: ImagePostSwitch(onImageClick: () {
-                          setState(() {
-                            isPic = true;
-                          });
-                        }, onPostClick: () {
-                          setState(() {
-                            isPic = false;
-                          });
-                        }),
+                        child: ImagePostSwitch(
+                          onImageClick: () {
+                            setState(() {
+                              isPic = true;
+                            });
+                          },
+                          onPostClick: () {
+                            setState(() {
+                              isPic = false;
+                            });
+                          },
+                          onGearClick: widget.id != null
+                              ? null
+                              : () {
+                                  Beamer.of(context)
+                                      .beamToNamed('/edit-profile');
+                                },
+                        ),
                       ),
                       /*if (snapshot.data?.id ==
                           ref.read(userProvider).profile?.id)

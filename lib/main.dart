@@ -1,6 +1,7 @@
 import 'package:beamer/beamer.dart';
 import 'package:buddy/screens/home/channel_screen.dart';
 import 'package:buddy/screens/home/chats.dart';
+import 'package:buddy/screens/home/edit-profile.dart';
 import 'package:buddy/screens/home/feed.dart';
 import 'package:buddy/screens/home/post.dart';
 import 'package:buddy/screens/home/profile.dart';
@@ -139,7 +140,7 @@ class _BuddyState extends ConsumerState<Buddy> {
 
   BeamerDelegate router(BuildContext context, WidgetRef ref) {
     return BeamerDelegate(
-      initialPath: '/profile/5c100b15-c043-42df-b754-db6333eff426',
+      initialPath: '/feed',
       locationBuilder: RoutesLocationBuilder(
         routes: {
           // Return either Widgets or BeamPages if more customization is needed
@@ -167,12 +168,19 @@ class _BuddyState extends ConsumerState<Buddy> {
           '/profile': (context, state, data) => const ProfileScreen(),
           '/profile/:id': (context, state, data) {
             final id = state.pathParameters['id'];
-            return ProfileScreen(id: id);
+            if (id == null || id == ref.read(authProvider).session?.user.id) {
+              return const ProfileScreen();
+            } else {
+              return ProfileScreen(id: id);
+            }
           },
 
-          '/post/:id': (context, state, data) => PostScreen(
-                id: state.pathParameters["id"]!,
-              ),
+          '/post/:id': (context, state, data) {
+            final id = state.pathParameters['id'];
+            return PostScreen(id: id);
+          },
+
+          '/edit-profile': (context, state, data) => const EditProfile(),
         },
       ).call,
       guards: [

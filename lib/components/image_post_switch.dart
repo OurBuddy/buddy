@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ImagePostSwitch extends StatefulHookConsumerWidget {
@@ -6,10 +7,12 @@ class ImagePostSwitch extends StatefulHookConsumerWidget {
     super.key,
     required this.onImageClick,
     required this.onPostClick,
+    this.onGearClick,
   });
 
   final void Function()? onImageClick;
   final void Function()? onPostClick;
+  final void Function()? onGearClick;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -98,6 +101,17 @@ class _ImagePostSwitchState extends ConsumerState<ImagePostSwitch> {
                     ),
                   ),
                 ),
+                if (widget.onGearClick != null) ...[
+                  const SizedBox(width: 4),
+                  IconButton(
+                    onPressed: widget.onGearClick,
+                    icon: SvgPicture.asset(
+                      "assets/icons/gear-duotone.svg",
+                      width: 20,
+                      height: 20,
+                    ),
+                  )
+                ]
               ],
             ),
           ),
