@@ -1,5 +1,6 @@
 import 'package:beamer/beamer.dart';
 import 'package:better_skeleton/skeleton_container.dart';
+import 'package:buddy/components/comments.dart';
 import 'package:buddy/data/post.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -204,8 +205,14 @@ class _FullPostState extends ConsumerState<FullPost>
               children: [
                 GestureDetector(
                   onTap: () {
-                    print('View all comments clicked.');
-                    // Implement navigation or logic to show all comments
+                    showModalBottomSheet(
+                      showDragHandle: true,
+                      isScrollControlled: true,
+                      context: context,
+                      builder: (context) => CommentsSheet(
+                        id: widget.post.id,
+                      ),
+                    );
                   },
                   child: const Text(
                     'View all comments',

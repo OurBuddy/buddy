@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:buddy/data/comments.dart';
+import 'package:buddy/data/profile.dart';
 import 'package:buddy/states/providers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -176,6 +178,53 @@ class PostProvider extends StateNotifier<PostState> {
     );
 
     return newPosts;
+  }
+
+  Future<List<Comment>>? fetchComments(String postId) async {
+    final comments =
+        await client.from("comments").select("*").eq("post", postId).limit(100);
+
+    // Get the user who created the comment
+    final List<Profile> users = [];
+    for (var comment in comments) {
+      final userIdx =
+          users.indexWhere((element) => element.id == comment["createdBy"]);
+      if (userIdx != -1) {
+        final user =
+            users.firstWhere((element) => element.id == comment["createdBy"]);
+        comment["username"] = user.username;
+        comment["userImageUrl"] = user.imageUrl;
+      } else {
+        final user = await client
+            .from("profile")
+            .select("*")
+            .eq("id", comment["createdBy"])
+            .single();
+        users.add(Profile.fromMap(user));
+        comment["profile"] = user;
+      }
+    }
+
+    return comments.map((e) => Comment.fromMap(e)).toList();
+  }
+
+  Future<String> postComment(String postId, String content) async {
+    // Trim, check if empty
+    if (content.trim().isEmpty) {
+      throw "Comment cannot be empty";
+    }
+
+    final comment = Comment(
+      id: const Uuid().v4(),
+      post: postId,
+      createdAt: DateTime.now(),
+      createdBy: ref.read(userProvider).profile!.id,
+      content: content.trim(),
+    );
+
+    await client.from("comments").insert(comment.toMap());
+
+    return comment.id;
   }
 
   Future<List<Post>> fetchAccPics(
