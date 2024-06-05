@@ -29,29 +29,38 @@ class ChatProvider extends StateNotifier<ChatState> {
   }
 
   final Ref ref;
+  bool _loading = false;
 
   Future<void> loginUser() async {
     // Login the user
+    if (_loading) return;
+    _loading = true;
 
-    // 1. Authenticate using Supabase to get token
-    final res = await _client.functions.invoke("getchat");
+    try {
+      // 1. Authenticate using Supabase to get token
+      final res = await _client.functions.invoke("getchat");
 
-    // 2. Connect to Stream Chat
-    final user = await state.client.connectUser(
-      User(id: ref.read(userProvider).profile!.id, extraData: {
-        'name': ref.read(userProvider).profile!.username,
-        'image': _client.storage.from('profile-pics').getPublicUrl(
-              ref.read(userProvider).profile!.imageUrl!,
-            ),
-      }),
-      res.data['token'],
-    );
+      // 2. Connect to Stream Chat
+      final user = await state.client.connectUser(
+        User(id: ref.read(userProvider).profile!.id, extraData: {
+          'name': ref.read(userProvider).profile!.username,
+          'image': _client.storage.from('profile-pics').getPublicUrl(
+                ref.read(userProvider).profile!.imageUrl!,
+              ),
+        }),
+        res.data['token'],
+      );
 
-    // 3. Update the state
-    state = ChatState(
-      client: state.client,
-      ownUser: user,
-    );
+      // 3. Update the state
+      state = ChatState(
+        client: state.client,
+        ownUser: user,
+      );
+    } catch (e) {
+      print(e);
+    }
+
+    _loading = false;
   }
 
   Future<Channel> createChat(String userId, String username) async {

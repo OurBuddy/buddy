@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:beamer/beamer.dart';
 import 'package:better_skeleton/skeleton_container.dart';
-import 'package:buddy/components/debounced_text.dart';
 import 'package:buddy/states/providers.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';

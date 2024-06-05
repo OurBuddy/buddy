@@ -331,13 +331,9 @@ class PostProvider extends StateNotifier<PostState> {
   Future<Post> fetchPost(String id) async {
     final post = await client.from("posts").select("*").eq("id", id).single();
 
-    final comments = await client
-        .from("comments")
-        .select("*")
-        .eq("post", post["id"])
-        .limit(100);
+    final comments = await fetchComments(id);
 
-    post["comments"] = comments;
+    post["comments"] = comments?.map((e) => e.toMapWithProfile()).toList();
 
     final user = await client
         .from("profile")

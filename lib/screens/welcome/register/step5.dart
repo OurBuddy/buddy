@@ -93,6 +93,10 @@ class _CreateState extends ConsumerState<SignUpStep5> {
                                             aspectRatio: const CropAspectRatio(
                                                 ratioX: 1, ratioY: 1),
                                             cropStyle: CropStyle.circle,
+                                            compressFormat:
+                                                ImageCompressFormat.jpg,
+                                            maxHeight: 512,
+                                            maxWidth: 512,
                                           );
 
                                           if (cropped != null) {
@@ -134,6 +138,10 @@ class _CreateState extends ConsumerState<SignUpStep5> {
                                           aspectRatio: const CropAspectRatio(
                                               ratioX: 1, ratioY: 1),
                                           cropStyle: CropStyle.circle,
+                                          compressFormat:
+                                              ImageCompressFormat.jpg,
+                                          maxHeight: 512,
+                                          maxWidth: 512,
                                         );
 
                                         if (cropped != null) {

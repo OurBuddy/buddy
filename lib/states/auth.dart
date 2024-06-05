@@ -83,6 +83,7 @@ class AuthProvider extends StateNotifier<AuthState> {
     Future.delayed(Duration.zero, () {
       ref.read(userProvider.notifier).setUser(session.user);
       ref.read(userProvider.notifier).getProfile();
+      ref.read(chatProvider.notifier).loginUser();
     });
   }
 
