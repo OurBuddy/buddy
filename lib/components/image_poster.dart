@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:buddy/components/buttons.dart';
 import 'package:buddy/states/providers.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -101,10 +102,11 @@ class _ImagePostDialogState extends ConsumerState<ImagePostDialog> {
                                 ? profile.hasPet
                                     ? const AssetImage('assets/dog-sitting.png')
                                     : const AssetImage('assets/person.png')
-                                : NetworkImage(Supabase.instance.client.storage
+                                : CachedNetworkImage(
+                                    imageUrl: Supabase.instance.client.storage
                                         .from('profile-pics')
-                                        .getPublicUrl(profile.imageUrl!))
-                                    as ImageProvider<Object>?,
+                                        .getPublicUrl(profile.imageUrl!),
+                                  ) as ImageProvider<Object>?,
                           ),
                           const SizedBox(width: 8),
                           Column(

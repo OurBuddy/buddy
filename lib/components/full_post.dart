@@ -1,5 +1,6 @@
 import 'package:better_skeleton/skeleton_container.dart';
 import 'package:buddy/data/post.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -102,24 +103,18 @@ class _FullPostState extends ConsumerState<FullPost>
                     aspectRatio: 4 / 5,
                     child: SizedBox(
                       width: double.infinity,
-                      child: Image.network(
-                        widget.post.getPostImageUrl ?? "",
-                        gaplessPlayback: true,
-                        errorBuilder: (context, error, stackTrace) {
-                          return const Center(
-                            child: Text(
-                              'Failed to load image',
-                            ),
-                          );
-                        },
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) {
-                            return child;
-                          } else {
-                            if (loadingProgress.cumulativeBytesLoaded ==
-                                loadingProgress.expectedTotalBytes) {
-                              return child;
-                            }
+                      child: Hero(
+                        tag: widget.post.id,
+                        child: CachedNetworkImage(
+                          imageUrl: widget.post.getPostImageUrl ?? "",
+                          errorWidget: (context, error, stackTrace) {
+                            return const Center(
+                              child: Text(
+                                'Failed to load image',
+                              ),
+                            );
+                          },
+                          placeholder: (context, url) {
                             return AnimatedSkeleton(
                               listenable: animationController,
                               child: Container(
@@ -127,8 +122,8 @@ class _FullPostState extends ConsumerState<FullPost>
                                 color: Colors.grey[200],
                               ),
                             );
-                          }
-                        },
+                          },
+                        ),
                       ),
                     ),
                   ),

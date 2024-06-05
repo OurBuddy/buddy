@@ -1,6 +1,6 @@
 import 'package:buddy/states/auth.dart';
 import 'package:buddy/states/chat.dart';
-import 'package:buddy/states/full_post.dart';
+import 'package:buddy/states/post.dart';
 import 'package:buddy/states/signup.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 

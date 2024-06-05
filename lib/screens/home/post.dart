@@ -1,6 +1,6 @@
 import 'package:buddy/components/appbar.dart';
 import 'package:buddy/components/navbar.dart';
-import 'package:buddy/components/post.dart';
+import 'package:buddy/components/full_post.dart';
 import 'package:buddy/states/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

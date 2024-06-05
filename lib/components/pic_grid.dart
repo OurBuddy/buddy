@@ -2,6 +2,7 @@ import 'package:beamer/beamer.dart';
 import 'package:better_skeleton/skeleton_container.dart';
 import 'package:buddy/data/post.dart';
 import 'package:buddy/states/providers.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -91,24 +92,18 @@ class _PicGridViewState extends ConsumerState<PicGridView>
                     aspectRatio: 4 / 5,
                     child: SizedBox(
                       height: 200,
-                      child: Image.network(
-                        post.getPostImageUrl ?? "",
-                        gaplessPlayback: true,
-                        errorBuilder: (context, error, stackTrace) {
-                          return const Center(
-                            child: Text(
-                              'Failed to load image',
-                            ),
-                          );
-                        },
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) {
-                            return child;
-                          } else {
-                            if (loadingProgress.cumulativeBytesLoaded ==
-                                loadingProgress.expectedTotalBytes) {
-                              return child;
-                            }
+                      child: Hero(
+                        tag: post.id,
+                        child: CachedNetworkImage(
+                          imageUrl: post.getPostImageUrl ?? "",
+                          errorWidget: (context, error, stackTrace) {
+                            return const Center(
+                              child: Text(
+                                'Failed to load image',
+                              ),
+                            );
+                          },
+                          placeholder: (context, url) {
                             return AnimatedSkeleton(
                               listenable: animationController,
                               child: Container(
@@ -116,8 +111,8 @@ class _PicGridViewState extends ConsumerState<PicGridView>
                                 color: Colors.grey[200],
                               ),
                             );
-                          }
-                        },
+                          },
+                        ),
                       ),
                     ),
                   ),
