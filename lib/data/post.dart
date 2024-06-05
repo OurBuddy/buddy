@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:buddy/data/comments.dart';
@@ -51,6 +52,14 @@ class Post {
         .from('posts')
         .update(toPostMap())
         .eq('id', id);
+  }
+
+  Future<void> delete() async {
+    await Supabase.instance.client.from('posts').delete().eq('id', id);
+  }
+
+  Future<void> report() async {
+    await Supabase.instance.client.from('reports').insert({'postId': id});
   }
 
   Post copyWith({

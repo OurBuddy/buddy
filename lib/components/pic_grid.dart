@@ -68,6 +68,37 @@ class _PicGridViewState extends ConsumerState<PicGridView>
               },
             );
           }
+          // No posts
+          if (snapshot.data!.isEmpty) {
+            return SliverToBoxAdapter(
+                child: Column(
+              children: [
+                const SizedBox(height: 20),
+                Image.asset(
+                  'assets/floating-cat.png',
+                  width: 200,
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                  'No posts yet',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  widget.id == null
+                      ? 'Start posting and spread the love!'
+                      : 'When they post, they will appear here.',
+                  style: const TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+                const SizedBox(height: 20),
+              ],
+            ));
+          }
 
           return SliverGrid.builder(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

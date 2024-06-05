@@ -30,16 +30,17 @@ class _PostScreenState extends ConsumerState<PostScreen> {
                     return const Center(child: CircularProgressIndicator());
                   }
                   if (snapshot.hasError || snapshot.data == null) {
-                    return const Center(child: Text('Error loading postsxs'));
+                    return const Center(child: Text('Error loading post'));
                   }
                   return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: SingleChildScrollView(
-                        child: FullPost(
-                          post: snapshot.data!,
-                          key: ValueKey(snapshot.data!.hashCode),
-                        ),
-                      ));
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: SingleChildScrollView(
+                      child: FullPost(
+                        post: snapshot.data!,
+                        key: ValueKey(snapshot.data!.hashCode),
+                      ),
+                    ),
+                  );
                 }),
           );
         },

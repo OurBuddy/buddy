@@ -158,13 +158,8 @@ class PostProvider extends StateNotifier<PostState> {
     }
 
     final newPosts = [
-      ...state.posts,
       ...posts.map((e) => Post.fromMap(e)),
     ];
-
-    // Remove duplicates
-    final seen = <String>{};
-    newPosts.removeWhere((element) => !seen.add(element.id));
 
     //Sort by date (newest first)
     newPosts.sort((a, b) => b.createdAt.compareTo(a.createdAt));
@@ -243,13 +238,9 @@ class PostProvider extends StateNotifier<PostState> {
           .single();
 
       for (var post in posts) {
-        final comments = await client
-            .from("comments")
-            .select("*")
-            .eq("post", post["id"])
-            .limit(100);
+        final comments = await fetchComments(post["id"] as String);
 
-        post["comments"] = comments;
+        post["comments"] = comments?.map((e) => e.toMapWithProfile()).toList();
 
         post["username"] = user["username"];
         post["userImageUrl"] = client.storage.from("profile-pics").getPublicUrl(
@@ -298,13 +289,9 @@ class PostProvider extends StateNotifier<PostState> {
           .single();
 
       for (var post in posts) {
-        final comments = await client
-            .from("comments")
-            .select("*")
-            .eq("post", post["id"])
-            .limit(100);
+        final comments = await fetchComments(post["id"] as String);
 
-        post["comments"] = comments;
+        post["comments"] = comments?.map((e) => e.toMapWithProfile()).toList();
 
         post["username"] = user["username"];
         post["userImageUrl"] = client.storage.from("profile-pics").getPublicUrl(

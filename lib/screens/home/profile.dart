@@ -1,4 +1,5 @@
 import 'package:buddy/components/appbar.dart';
+import 'package:buddy/components/buttons.dart';
 import 'package:buddy/components/image_post_switch.dart';
 import 'package:buddy/components/navbar.dart';
 import 'package:buddy/components/pic_grid.dart';
@@ -9,6 +10,7 @@ import 'package:buddy/states/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class ProfileScreen extends StatefulHookConsumerWidget {
   const ProfileScreen({super.key, this.id});
@@ -66,17 +68,81 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           });
                         }),
                       ),
-                      const SliverToBoxAdapter(child: SizedBox(height: 20)),
-                      if (isPic)
+                      /*if (snapshot.data?.id ==
+                          ref.read(userProvider).profile?.id)
+                        SliverToBoxAdapter(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Button(
+                              onPressed: () {
+                                Navigator.pushNamed(context, '/edit-profile');
+                              },
+                              child: const Text('Edit Profile'),
+                            ),
+                          ),
+                        ),*/
+                      // Check if petName is null
+
+                      if (snapshot.data?.petName == null)
+                        SliverToBoxAdapter(
+                          child: Column(
+                            children: [
+                              const SizedBox(height: 20),
+                              Image.asset(
+                                'assets/floating-cat.png',
+                                width: 200,
+                              ),
+                              const SizedBox(height: 20),
+                              const Text(
+                                'This is a hooman account!',
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 5),
+                              Text(
+                                widget.id == null
+                                    ? 'You need a pet to post!'
+                                    : 'They can’t post but they can still be your buddies!',
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                ),
+                              ),
+                              if (widget.id == null) ...[
+                                const SizedBox(height: 20),
+                                Button(
+                                  onPressed: () {
+                                    Navigator.pushNamed(context, '/add-pet');
+                                  },
+                                  child: const Text('I have a pet!'),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    launchUrlString(
+                                      "https://www.petfinder.com/",
+                                      mode: LaunchMode.inAppBrowserView,
+                                    );
+                                  },
+                                  child: const Text(
+                                    'I want a pet, lets look at local shelters!',
+                                  ),
+                                ),
+                              ],
+                              const SizedBox(height: 20),
+                            ],
+                          ),
+                        )
+                      else if (isPic)
                         SliverSafeArea(
                           top: false,
-                          minimum: const EdgeInsets.only(bottom: 80),
+                          minimum: const EdgeInsets.only(top: 20, bottom: 80),
                           sliver: PicGridView(id: widget.id),
                         )
                       else
                         SliverSafeArea(
                           top: false,
-                          minimum: const EdgeInsets.only(bottom: 80),
+                          minimum: const EdgeInsets.only(top: 20, bottom: 80),
                           sliver: TextListView(id: widget.id),
                         ),
                     ],

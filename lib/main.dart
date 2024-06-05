@@ -139,7 +139,7 @@ class _BuddyState extends ConsumerState<Buddy> {
 
   BeamerDelegate router(BuildContext context, WidgetRef ref) {
     return BeamerDelegate(
-      initialPath: '/feed',
+      initialPath: '/profile/5c100b15-c043-42df-b754-db6333eff426',
       locationBuilder: RoutesLocationBuilder(
         routes: {
           // Return either Widgets or BeamPages if more customization is needed

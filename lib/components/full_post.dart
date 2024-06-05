@@ -1,6 +1,7 @@
 import 'package:beamer/beamer.dart';
 import 'package:better_skeleton/skeleton_container.dart';
 import 'package:buddy/components/comments.dart';
+import 'package:buddy/components/post_actions.dart';
 import 'package:buddy/data/post.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -84,8 +85,11 @@ class _FullPostState extends ConsumerState<FullPost>
             trailing: IconButton(
               icon: const Icon(Icons.more_horiz_rounded),
               onPressed: () {
-                print('More options clicked.');
-                // Implement more options logic
+                showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return PostActions(post: widget.post);
+                    });
               },
             ),
           ),
@@ -142,7 +146,7 @@ class _FullPostState extends ConsumerState<FullPost>
             child: Row(
               children: [
                 SizedBox(
-                  width: 50,
+                  width: 58,
                   child: GestureDetector(
                       onTap: () {
                         widget.post.like();
@@ -158,15 +162,32 @@ class _FullPostState extends ConsumerState<FullPost>
                               height: 19),
                           const SizedBox(width: 8),
                           Text('${widget.post.likeCount}'),
+                          const SizedBox(width: 8),
                         ],
                       )),
                 ),
-                const SizedBox(width: 16),
-                SvgPicture.asset('assets/icons/Posts/filledComment.svg',
-                    width: 22, height: 19),
-                const SizedBox(width: 8),
-                Text('${widget.post.commentCount}'),
-                const SizedBox(width: 16),
+                GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: () {
+                    showModalBottomSheet(
+                      isScrollControlled: true,
+                      context: context,
+                      builder: (context) => CommentsSheet(
+                        id: widget.post.id,
+                      ),
+                    );
+                  },
+                  child: Row(
+                    children: [
+                      const SizedBox(width: 8),
+                      SvgPicture.asset('assets/icons/Posts/filledComment.svg',
+                          width: 22, height: 19),
+                      const SizedBox(width: 8),
+                      Text('${widget.post.commentCount}'),
+                      const SizedBox(width: 8),
+                    ],
+                  ),
+                ),
                 Expanded(
                   child: Text(
                     format(widget.post.createdAt.toLocal()),

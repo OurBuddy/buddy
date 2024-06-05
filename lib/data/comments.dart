@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:buddy/data/profile.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class Comment {
   String id;
@@ -36,6 +37,14 @@ class Comment {
       content: content ?? this.content,
       profile: profile,
     );
+  }
+
+  Future<void> delete() async {
+    await Supabase.instance.client.from('comments').delete().eq('id', id);
+  }
+
+  Future<void> report() async {
+    await Supabase.instance.client.from('reports').insert({'commentId': id});
   }
 
   Map<String, dynamic> toMap() {

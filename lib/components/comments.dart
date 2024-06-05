@@ -1,4 +1,5 @@
 import 'package:better_skeleton/skeleton_container.dart';
+import 'package:buddy/components/comment_actions.dart';
 import 'package:buddy/data/comments.dart';
 import 'package:buddy/states/providers.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -196,6 +197,19 @@ class _CommentsSheetState extends ConsumerState<CommentsSheet>
                                       Text(snapshot.data![index].content),
                                     ],
                                   ),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.more_horiz_rounded),
+                                  onPressed: () {
+                                    showModalBottomSheet(
+                                      context: context,
+                                      builder: (context) {
+                                        return CommentActions(
+                                          comment: snapshot.data![index],
+                                        );
+                                      },
+                                    );
+                                  },
                                 ),
                               ],
                             ),
