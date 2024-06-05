@@ -177,4 +177,55 @@ class PostProvider extends StateNotifier<PostState> {
 
     return newPosts;
   }
+
+  Future<List<Post>> fetchAccPics(
+      {int start = 0, int limit = 20, getAllData = true, String? id}) async {
+    id ??= ref.read(userProvider).profile!.id;
+
+    final posts = await client
+        .from("posts")
+        .select("*")
+        .eq("createdBy", id)
+        .range(start, limit + start);
+
+    // remove non-image posts
+    posts.removeWhere((element) => element["postImageUrl"] == null);
+
+    if (getAllData) {
+      final user = await client
+          .from("profile")
+          .select("username, personName, profilePic")
+          .eq("id", id)
+          .single();
+
+      for (var post in posts) {
+        final comments = await client
+            .from("comments")
+            .select("*")
+            .eq("post", post["id"])
+            .limit(100);
+
+        post["comments"] = comments;
+
+        post["username"] = user["username"];
+        post["userImageUrl"] = client.storage.from("profile-pics").getPublicUrl(
+              user["profilePic"],
+            );
+        post["petowner"] = user["personName"];
+      }
+    }
+
+    final newPosts = [
+      ...posts.map((e) => Post.fromMap(e)),
+    ];
+
+    // Remove duplicates
+    final seen = <String>{};
+    newPosts.removeWhere((element) => !seen.add(element.id));
+
+    //Sort by date (newest first)
+    newPosts.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+
+    return newPosts;
+  }
 }

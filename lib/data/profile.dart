@@ -73,7 +73,7 @@ class Profile {
       'petName': petName,
       'username': username,
       'bio': bio,
-      'lastModifiedAt': DateTime.now().toUtc().toIso8601String(),
+      'lastModifiedAt': DateTime.now().toUtc().toUtc().toIso8601String(),
       'profilePic': imageUrl,
     };
   }
@@ -172,7 +172,7 @@ class ProfilePrivate {
       'pushIds': pushIds,
       'blockedUsers': blockedUsers,
       'public': public,
-      'lastUpdatedAt': DateTime.now().toUtc().toIso8601String(),
+      'lastUpdatedAt': DateTime.now().toUtc().toUtc().toIso8601String(),
     };
   }
 

@@ -81,7 +81,7 @@ class Post {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'createdAt': createdAt.toIso8601String(),
+      'createdAt': createdAt.toUtc().toIso8601String(),
       'createdBy': createdBy,
       'postImageUrl': postImageUrl,
       'caption': caption,
@@ -96,7 +96,7 @@ class Post {
   Map<String, dynamic> toPostMap() {
     return {
       'id': id,
-      'createdAt': createdAt.toIso8601String(),
+      'createdAt': createdAt.toUtc().toIso8601String(),
       'createdBy': createdBy,
       'postImageUrl': postImageUrl,
       'caption': caption,
@@ -197,7 +197,7 @@ class Comment {
     return {
       'id': id,
       'post': post,
-      'createdAt': createdAt.toIso8601String(),
+      'createdAt': createdAt.toUtc().toIso8601String(),
       'createdBy': createdBy,
       'content': content,
     };

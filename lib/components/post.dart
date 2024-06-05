@@ -166,7 +166,7 @@ class _FullPostState extends ConsumerState<FullPost>
                 const SizedBox(width: 16),
                 Expanded(
                   child: Text(
-                    format(widget.post.createdAt),
+                    format(widget.post.createdAt.toLocal()),
                     textAlign: TextAlign.end,
                     style: const TextStyle(
                       color: Color(0xFF898989),

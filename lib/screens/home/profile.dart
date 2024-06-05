@@ -1,9 +1,12 @@
 import 'package:buddy/components/appbar.dart';
+import 'package:buddy/components/image_post_switch.dart';
 import 'package:buddy/components/navbar.dart';
+import 'package:buddy/components/pic_grid.dart';
 import 'package:buddy/components/profile_header.dart';
 import 'package:buddy/data/profile.dart';
 import 'package:buddy/states/providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ProfileScreen extends StatefulHookConsumerWidget {
@@ -17,6 +20,7 @@ class ProfileScreen extends StatefulHookConsumerWidget {
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   Future<Profile?>? profile;
+  bool isPic = true;
 
   @override
   void initState() {
@@ -41,11 +45,37 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 if (snapshot.connectionState != ConnectionState.done) {
                   return const Center(child: CircularProgressIndicator());
                 }
-                return ListView(
-                  controller: scroll,
-                  children: <Widget>[
-                    ProfileHeader(profile: snapshot.data),
-                  ],
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: CustomScrollView(
+                    controller: scroll,
+                    slivers: <Widget>[
+                      //ProfileHeader(profile: snapshot.data),
+                      SliverToBoxAdapter(
+                        child: ProfileHeader(profile: snapshot.data),
+                      ),
+                      SliverToBoxAdapter(
+                        child: ImagePostSwitch(onImageClick: () {
+                          setState(() {
+                            isPic = true;
+                          });
+                        }, onPostClick: () {
+                          setState(() {
+                            isPic = false;
+                          });
+                        }),
+                      ),
+                      const SliverToBoxAdapter(child: SizedBox(height: 20)),
+                      if (isPic)
+                        SliverSafeArea(
+                          top: false,
+                          minimum: const EdgeInsets.only(bottom: 80),
+                          sliver: PicGridView(id: widget.id),
+                        )
+                      else
+                        const SliverToBoxAdapter(child: SizedBox()),
+                    ],
+                  ),
                 );
               });
         },

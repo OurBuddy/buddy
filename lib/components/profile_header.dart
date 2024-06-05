@@ -15,9 +15,10 @@ class ProfileHeader extends StatefulHookConsumerWidget {
 }
 
 class _ProfileHeaderState extends ConsumerState<ProfileHeader> {
+  Future<dynamic>? profile;
   @override
   Widget build(BuildContext context) {
-    final profile = ref.read(userProvider.notifier).getProfileStats(
+    profile ??= ref.read(userProvider.notifier).getProfileStats(
           id: widget.profile!.id,
         );
 
@@ -27,7 +28,7 @@ class _ProfileHeaderState extends ConsumerState<ProfileHeader> {
     return SizedBox(
       width: double.infinity,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
+        padding: const EdgeInsets.symmetric(vertical: 16.0),
         child: Column(
           children: [
             SizedBox(
@@ -219,7 +220,7 @@ class _ProfileHeaderState extends ConsumerState<ProfileHeader> {
               BuddyButton(
                 ref: ref,
                 widget: widget,
-                profile: profile,
+                profile: profile!,
               )
           ],
         ),
