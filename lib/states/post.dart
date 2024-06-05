@@ -138,13 +138,9 @@ class PostProvider extends StateNotifier<PostState> {
 
     if (getAllData) {
       for (var post in posts) {
-        final comments = await client
-            .from("comments")
-            .select("*")
-            .eq("post", post["id"])
-            .limit(100);
+        final comments = await fetchComments(post["id"] as String);
 
-        post["comments"] = comments;
+        post["comments"] = comments?.map((e) => e.toMapWithProfile()).toList();
 
         // Also get the user who created the post
         final user = await client
@@ -192,8 +188,7 @@ class PostProvider extends StateNotifier<PostState> {
       if (userIdx != -1) {
         final user =
             users.firstWhere((element) => element.id == comment["createdBy"]);
-        comment["username"] = user.username;
-        comment["userImageUrl"] = user.imageUrl;
+        comment["profile"] = user.toMap();
       } else {
         final user = await client
             .from("profile")

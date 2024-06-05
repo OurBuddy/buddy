@@ -48,6 +48,17 @@ class Comment {
     };
   }
 
+  Map<String, dynamic> toMapWithProfile() {
+    return {
+      'id': id,
+      'post': post,
+      'createdAt': createdAt.toUtc().toIso8601String(),
+      'createdBy': createdBy,
+      'content': content,
+      'profile': profile?.toMap(),
+    };
+  }
+
   factory Comment.fromMap(Map<String, dynamic> map) {
     return Comment(
       id: map['id'] ?? '',

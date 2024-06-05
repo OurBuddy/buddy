@@ -50,6 +50,7 @@ class _CommentsSheetState extends ConsumerState<CommentsSheet>
             bottom: MediaQuery.of(context).viewInsets.bottom,
             left: 8,
             right: 8,
+            top: 8,
           ),
           child: ClipRRect(
             borderRadius: const BorderRadius.only(
@@ -74,7 +75,7 @@ class _CommentsSheetState extends ConsumerState<CommentsSheet>
                           itemBuilder: (context, index) {
                             return Padding(
                               padding: const EdgeInsets.symmetric(
-                                  vertical: 20, horizontal: 8),
+                                  vertical: 10, horizontal: 8),
                               child: AnimatedSkeleton(
                                   listenable: animationController,
                                   child: Row(
@@ -144,59 +145,60 @@ class _CommentsSheetState extends ConsumerState<CommentsSheet>
                           ],
                         ));
                       }
+
                       return ListView.builder(
                         itemBuilder: (context, index) {
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              CircleAvatar(
-                                radius: 20,
-                                backgroundImage: snapshot
-                                            .data![index].profile?.hasPet ??
-                                        false
-                                    ? const AssetImage('assets/dog-sitting.png')
-                                    : const AssetImage('assets/person.png'),
-                                foregroundImage: snapshot
-                                            .data![index].profile!.imageUrl ==
-                                        null
-                                    ? snapshot.data![index].profile!.hasPet
-                                        ? const AssetImage(
-                                            'assets/dog-sitting.png')
-                                        : const AssetImage('assets/person.png')
-                                    : CachedNetworkImageProvider(
-                                        Supabase.instance.client.storage
-                                            .from('profile-pics')
-                                            .getPublicUrl(snapshot.data![index]
-                                                .profile!.imageUrl!),
-                                      ) as ImageProvider<Object>?,
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      '@${snapshot.data![index].profile!.username}',
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    Text(
-                                      snapshot.data![index].profile!.personName,
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.normal,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Text(snapshot.data![index].content),
-                                  ],
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 8),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                CircleAvatar(
+                                  radius: 20,
+                                  backgroundImage: snapshot
+                                              .data![index].profile?.hasPet ??
+                                          false
+                                      ? const AssetImage(
+                                          'assets/dog-sitting.png')
+                                      : const AssetImage('assets/person.png'),
+                                  foregroundImage: snapshot
+                                              .data![index].profile!.imageUrl ==
+                                          null
+                                      ? snapshot.data![index].profile!.hasPet
+                                          ? const AssetImage(
+                                              'assets/dog-sitting.png')
+                                          : const AssetImage(
+                                              'assets/person.png')
+                                      : CachedNetworkImageProvider(
+                                          Supabase.instance.client.storage
+                                              .from('profile-pics')
+                                              .getPublicUrl(snapshot
+                                                  .data![index]
+                                                  .profile!
+                                                  .imageUrl!),
+                                        ) as ImageProvider<Object>?,
                                 ),
-                              ),
-                            ],
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '@${snapshot.data![index].profile!.username}',
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Text(snapshot.data![index].content),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           );
                         },
                         itemCount: snapshot.data!.length,
@@ -273,6 +275,7 @@ class _CommentsSheetState extends ConsumerState<CommentsSheet>
                     ],
                   ),
                 ),
+                const SizedBox(height: 8),
               ],
             ),
           ),

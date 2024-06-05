@@ -206,7 +206,6 @@ class _FullPostState extends ConsumerState<FullPost>
                 GestureDetector(
                   onTap: () {
                     showModalBottomSheet(
-                      showDragHandle: true,
                       isScrollControlled: true,
                       context: context,
                       builder: (context) => CommentsSheet(
@@ -220,27 +219,29 @@ class _FullPostState extends ConsumerState<FullPost>
                   ),
                 ),
                 const SizedBox(height: 4),
-                ...(widget.post.comments ?? []).map(
-                  (comment) => Padding(
-                    padding: const EdgeInsets.only(top: 6),
-                    child: RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                              text: "${comment.createdBy}: ",
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 12,
-                                  color: Colors.black)),
-                          TextSpan(
-                              text: comment.content,
-                              style: const TextStyle(
-                                  fontSize: 12, color: Colors.black)),
-                        ],
+                // Only the first 3 comments are shown
+                ...(widget.post.comments ?? []).take(3).map(
+                      (comment) => Padding(
+                        padding: const EdgeInsets.only(top: 6),
+                        child: RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                  text:
+                                      "${comment.profile?.username ?? 'User'} ",
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12,
+                                      color: Colors.black)),
+                              TextSpan(
+                                  text: comment.content,
+                                  style: const TextStyle(
+                                      fontSize: 12, color: Colors.black)),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
                 const SizedBox(height: 16),
               ],
             ),
