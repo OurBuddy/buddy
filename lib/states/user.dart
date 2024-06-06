@@ -462,7 +462,7 @@ class UserProvider extends StateNotifier<UserState> {
     }
   }
 
-  Future<void> updateProfilePic(File image) async {
+  Future<String> updateProfilePic(File image) async {
     Configuration config = const Configuration(
       outputType: ImageOutputType.jpg,
       quality: 40,
@@ -476,22 +476,33 @@ class UserProvider extends StateNotifier<UserState> {
       config: config,
     ));
 
-    await Supabase.instance.client.storage.from("profile-pics").uploadBinary(
-          "${state.profile!.id}/profile.jpg",
-          compImg.rawBytes,
-          fileOptions: const FileOptions(
-            cacheControl: "3600",
-            contentType: "image/jpg",
-          ),
-        );
+    try {
+      await Supabase.instance.client.storage.from("profile-pics").uploadBinary(
+            "${state.profile!.id}/profile.jpg",
+            compImg.rawBytes,
+            fileOptions: const FileOptions(
+              cacheControl: "3600",
+              contentType: "image/jpg",
+            ),
+          );
+    } catch (e) {
+      await Supabase.instance.client.storage.from("profile-pics").updateBinary(
+            "${state.profile!.id}/profile.jpg",
+            compImg.rawBytes,
+            fileOptions: const FileOptions(
+              cacheControl: "3600",
+              contentType: "image/jpg",
+            ),
+          );
+    }
 
     await updateProfile(
       state.profile!.copyWith(
-        imageUrl: Supabase.instance.client.storage
-            .from("profile-pics")
-            .getPublicUrl("${state.profile!.id}/profile.jpg"),
+        imageUrl: ("${state.profile!.id}/profile.jpg"),
       ),
     );
+
+    return ("${state.profile!.id}/profile.jpg");
   }
 
   addBuddy(String id) async {

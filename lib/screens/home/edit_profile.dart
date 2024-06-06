@@ -49,26 +49,33 @@ class _EditProfileState extends ConsumerState<EditProfile> {
         padding: const EdgeInsets.only(bottom: 40),
         child: FloatingActionButton.extended(
           onPressed: () async {
-            final future = ref.read(userProvider.notifier).updateProfile(
-                  profile.copyWith(
-                    username: usernameController.text,
-                    bio: bio.text,
-                    personName: personName.text,
-                    petName: petName.text,
-                    imageUrl: profilePic != null
-                        ? profilePic!.path
-                        : profile.imageUrl,
-                  ),
-                );
-
             final profileImage = profilePic != null
                 ? ref.read(userProvider.notifier).updateProfilePic(
                       File(profilePic!.path),
                     )
                 : Future.value(null);
 
-            setState(() {});
-            await Future.wait([future, profileImage]);
+            setState(() {
+              profileUpdate = profileImage;
+            });
+
+            final loc = await profileImage;
+
+            final future = ref.read(userProvider.notifier).updateProfile(
+                  profile.copyWith(
+                    username: usernameController.text,
+                    bio: bio.text,
+                    personName: personName.text,
+                    petName: petName.text,
+                    imageUrl: profilePic != null ? loc : profile.imageUrl,
+                  ),
+                );
+
+            setState(() {
+              profileUpdate = future;
+            });
+
+            await future;
           },
           label: const Text("Save"),
           icon: const Icon(Icons.save),
@@ -89,7 +96,14 @@ class _EditProfileState extends ConsumerState<EditProfile> {
                   future: profileUpdate,
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: LoadingSpinner());
+                      return const Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          LoadingSpinner(),
+                          SizedBox(height: 10),
+                          Text("Updating Profile..."),
+                        ],
+                      );
                     }
                     if (snapshot.hasError) {
                       return Center(
@@ -415,7 +429,7 @@ class _EditProfileState extends ConsumerState<EditProfile> {
                               ref.read(userProvider.notifier).logout();
                               Beamer.of(context).beamToNamed('/welcome');
                             },
-                            child: Text("Logout")),
+                            child: const Text("Logout")),
                         const SizedBox(
                           height: 100,
                         )

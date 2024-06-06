@@ -1,7 +1,7 @@
 import 'package:beamer/beamer.dart';
 import 'package:buddy/screens/home/channel_screen.dart';
 import 'package:buddy/screens/home/chats.dart';
-import 'package:buddy/screens/home/edit-profile.dart';
+import 'package:buddy/screens/home/edit_profile.dart';
 import 'package:buddy/screens/home/feed.dart';
 import 'package:buddy/screens/home/post.dart';
 import 'package:buddy/screens/home/profile.dart';

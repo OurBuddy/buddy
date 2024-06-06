@@ -7394,3 +7394,41 @@ at:
 [WrapWithProviderScope] 2024-06-04T21:37:10.929097 #264    ServerPlugin._onRequest (package:analyzer_plugin/plugin/plugin.dart:599:18)
 [WrapWithProviderScope] 2024-06-04T21:37:10.929097 <asynchronous suspension>
 [WrapWithProviderScope] 2024-06-04T21:37:10.929097
+[WrapWithConsumer] 2024-06-05T19:29:17.591495 Plugin WrapWithConsumer threw while analyzing /Users/emorenoa/Desktop/GitHub Projects/buddy/lib/screens/home/edit?profile.dart:
+[WrapWithConsumer] 2024-06-05T19:29:17.591495 type 'NotPathOfUriResult' is not a subtype of type 'ResolvedUnitResult' in type cast
+[WrapWithConsumer] 2024-06-05T19:29:17.591495 #0      _extension#1.safeGetResolvedUnitResult (package:custom_lint_builder/src/client.dart:77:23)
+[WrapWithConsumer] 2024-06-05T19:29:17.591495 <asynchronous suspension>
+[WrapWithConsumer] 2024-06-05T19:29:17.591495 #1      _ParseRiverpod._setupRiverpod (package:riverpod_lint/src/riverpod_custom_lint.dart:89:18)
+[WrapWithConsumer] 2024-06-05T19:29:17.591495 <asynchronous suspension>
+[WrapWithConsumer] 2024-06-05T19:29:17.591495 #2      RiverpodAssist.startUp (package:riverpod_lint/src/riverpod_custom_lint.dart:49:5)
+[WrapWithConsumer] 2024-06-05T19:29:17.591495 <asynchronous suspension>
+[WrapWithConsumer] 2024-06-05T19:29:17.591495 #3      _AsyncCompleter.complete (dart:async/future_impl.dart:41:3)
+[WrapWithConsumer] 2024-06-05T19:29:17.591495 <asynchronous suspension>
+[WrapWithConsumer] 2024-06-05T19:29:17.591495 #4      Future.wait.<anonymous closure> (dart:async/future.dart:524:21)
+[WrapWithConsumer] 2024-06-05T19:29:17.591495 <asynchronous suspension>
+[WrapWithConsumer] 2024-06-05T19:29:17.591495 #5      _ClientAnalyzerPlugin.handleEditGetAssists (package:custom_lint_builder/src/client.dart:480:5)
+[WrapWithConsumer] 2024-06-05T19:29:17.591495 <asynchronous suspension>
+[WrapWithConsumer] 2024-06-05T19:29:17.591495 #6      ServerPlugin._getResponse (package:analyzer_plugin/plugin/plugin.dart:556:18)
+[WrapWithConsumer] 2024-06-05T19:29:17.591495 <asynchronous suspension>
+[WrapWithConsumer] 2024-06-05T19:29:17.591495 #7      ServerPlugin._onRequest (package:analyzer_plugin/plugin/plugin.dart:599:18)
+[WrapWithConsumer] 2024-06-05T19:29:17.591495 <asynchronous suspension>
+[WrapWithConsumer] 2024-06-05T19:29:17.591495
+[WrapWithConsumer] 2024-06-05T19:29:17.594139 Plugin WrapWithConsumer threw while analyzing /Users/emorenoa/Desktop/GitHub Projects/buddy/lib/screens/home/edit?profile.dart:
+[WrapWithConsumer] 2024-06-05T19:29:17.594139 type 'NotPathOfUriResult' is not a subtype of type 'ResolvedUnitResult' in type cast
+[WrapWithConsumer] 2024-06-05T19:29:17.594139 #0      _extension#1.safeGetResolvedUnitResult (package:custom_lint_builder/src/client.dart:77:23)
+[WrapWithConsumer] 2024-06-05T19:29:17.594139 <asynchronous suspension>
+[WrapWithConsumer] 2024-06-05T19:29:17.594139 #1      _ParseRiverpod._setupRiverpod (package:riverpod_lint/src/riverpod_custom_lint.dart:89:18)
+[WrapWithConsumer] 2024-06-05T19:29:17.594139 <asynchronous suspension>
+[WrapWithConsumer] 2024-06-05T19:29:17.594139 #2      RiverpodAssist.startUp (package:riverpod_lint/src/riverpod_custom_lint.dart:49:5)
+[WrapWithConsumer] 2024-06-05T19:29:17.594139 <asynchronous suspension>
+[WrapWithConsumer] 2024-06-05T19:29:17.594139 #3      _AsyncCompleter.complete (dart:async/future_impl.dart:41:3)
+[WrapWithConsumer] 2024-06-05T19:29:17.594139 <asynchronous suspension>
+[WrapWithConsumer] 2024-06-05T19:29:17.594139 #4      Future.wait.<anonymous closure> (dart:async/future.dart:524:21)
+[WrapWithConsumer] 2024-06-05T19:29:17.594139 <asynchronous suspension>
+[WrapWithConsumer] 2024-06-05T19:29:17.594139 #5      _ClientAnalyzerPlugin.handleEditGetAssists (package:custom_lint_builder/src/client.dart:480:5)
+[WrapWithConsumer] 2024-06-05T19:29:17.594139 <asynchronous suspension>
+[WrapWithConsumer] 2024-06-05T19:29:17.594139 #6      ServerPlugin._getResponse (package:analyzer_plugin/plugin/plugin.dart:556:18)
+[WrapWithConsumer] 2024-06-05T19:29:17.594139 <asynchronous suspension>
+[WrapWithConsumer] 2024-06-05T19:29:17.594139 #7      ServerPlugin._onRequest (package:analyzer_plugin/plugin/plugin.dart:599:18)
+[WrapWithConsumer] 2024-06-05T19:29:17.594139 <asynchronous suspension>
+[WrapWithConsumer] 2024-06-05T19:29:17.594139
