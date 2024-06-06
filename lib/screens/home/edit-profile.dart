@@ -41,7 +41,6 @@ class _EditProfileState extends ConsumerState<EditProfile> {
     final usernameController = useTextEditingController(text: profile.username);
     final bio = useTextEditingController(text: profile.bio);
     final personName = useTextEditingController(text: profile.personName);
-    final hasPet = useState(profile.hasPet);
     final petName = useTextEditingController(text: profile.petName);
 
     return Scaffold(
@@ -50,7 +49,7 @@ class _EditProfileState extends ConsumerState<EditProfile> {
         padding: const EdgeInsets.only(bottom: 40),
         child: FloatingActionButton.extended(
           onPressed: () async {
-            profileUpdate = ref.read(userProvider.notifier).updateProfile(
+            final future = ref.read(userProvider.notifier).updateProfile(
                   profile.copyWith(
                     username: usernameController.text,
                     bio: bio.text,
@@ -61,8 +60,15 @@ class _EditProfileState extends ConsumerState<EditProfile> {
                         : profile.imageUrl,
                   ),
                 );
+
+            final profileImage = profilePic != null
+                ? ref.read(userProvider.notifier).updateProfilePic(
+                      File(profilePic!.path),
+                    )
+                : Future.value(null);
+
             setState(() {});
-            await profileUpdate;
+            await Future.wait([future, profileImage]);
           },
           label: const Text("Save"),
           icon: const Icon(Icons.save),
